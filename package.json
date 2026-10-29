@@ -1,7 +1,7 @@
 {
   "name": "road-to-hsk4",
-  "productName": "Road to HSK 4",
-  "version": "1.1.0",
+  "productName": "Road to HSK",
+  "version": "1.1.1",
   "description": "Chinese practice: flashcards, handwriting, pinyin, listening, tones and grammar for Integrated Chinese and HSK 1-2",
   "main": "main.js",
   "author": "Isaac",
@@ -20,14 +20,14 @@
   },
   "build": {
     "appId": "com.isaac.roadtohsk4",
-    "productName": "Road to HSK 4",
+    "productName": "Road to HSK",
     "directories": { "output": "dist", "buildResources": "build" },
     "files": ["main.js", "preload.js", "index.html", "build/icon.png"],
     "publish": [{ "provider": "github", "owner": "Jefest1", "repo": "road-to-hsk4", "releaseType": "release" }],
     "win": {
       "target": [{ "target": "nsis", "arch": ["x64"] }],
       "icon": "build/icon.png",
-      "artifactName": "Road to HSK 4 Setup ${version}.${ext}"
+      "artifactName": "Road to HSK Setup ${version}.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -35,7 +35,7 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Road to HSK 4"
+      "shortcutName": "Road to HSK"
     }
   }
 }

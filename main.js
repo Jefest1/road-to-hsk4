@@ -45,7 +45,7 @@ function createWindow() {
     height: 820,
     minWidth: 400,
     minHeight: 600,
-    title: "Road to HSK 4",
+    title: "Road to HSK",
     icon: path.join(__dirname, "build", "icon.png"),
     backgroundColor: nativeTheme.shouldUseDarkColors ? "#101614" : "#F3F6F4",
     autoHideMenuBar: true,

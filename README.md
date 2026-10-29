@@ -1,4 +1,4 @@
-# Road to HSK 4
+# Road to HSK
 
 A Chinese study app for Integrated Chinese Lessons 1–5 and HSK 1–2: flashcards with spaced review, handwriting practice, pinyin typing with tone checking, listening, tone and grammar drills, and read-aloud of any Chinese text using the Mandarin voices installed on the computer.
 
