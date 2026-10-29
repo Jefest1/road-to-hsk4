@@ -1,0 +1,41 @@
+{
+  "name": "road-to-hsk4",
+  "productName": "Road to HSK 4",
+  "version": "1.1.0",
+  "description": "Chinese practice: flashcards, handwriting, pinyin, listening, tones and grammar for Integrated Chinese and HSK 1-2",
+  "main": "main.js",
+  "author": "Isaac",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "dependencies": {
+    "electron-updater": "6.8.11"
+  },
+  "devDependencies": {
+    "electron": "33.4.11",
+    "electron-builder": "25.1.8"
+  },
+  "build": {
+    "appId": "com.isaac.roadtohsk4",
+    "productName": "Road to HSK 4",
+    "directories": { "output": "dist", "buildResources": "build" },
+    "files": ["main.js", "preload.js", "index.html", "build/icon.png"],
+    "publish": [{ "provider": "github", "owner": "Jefest1", "repo": "road-to-hsk4", "releaseType": "release" }],
+    "win": {
+      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "icon": "build/icon.png",
+      "artifactName": "Road to HSK 4 Setup ${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Road to HSK 4"
+    }
+  }
+}

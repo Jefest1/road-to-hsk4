@@ -1,0 +1,1491 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data:"></head><body><title>Road to HSK 4</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap">
+<style>
+/* Layout: one study column. Progress path on top, deck and mode controls, then a tian-zi-ge practice card at the centre. */
+:root{
+  --paper:#F3F6F4; --surface:#FFFFFF; --surface-2:#E9EFEB;
+  --ink:#15201B; --ink-2:#47574F; --ink-3:#77857E;
+  --line:#D6DFD9; --grid:#E2A39A;
+  --jade:#15745A; --jade-ink:#FFFFFF; --jade-soft:#DCEFE6;
+  --t1:#CF3529; --t2:#C97800; --t3:#1F8C45; --t4:#2A5FC4; --t0:#85908A;
+  --good:#15745A; --good-soft:#DCEFE6; --bad:#B5362A; --bad-soft:#F8E0DC; --warn-soft:#F6EBD3;
+  --hz:"Noto Serif SC","Songti SC","SimSun","Noto Serif CJK SC",serif;
+  --ui:"Source Sans 3","Segoe UI",system-ui,-apple-system,sans-serif;
+  --shadow:0 1px 2px rgba(20,40,30,.08);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#101614; --surface:#18201D; --surface-2:#222C28;
+    --ink:#E6EEEA; --ink-2:#AAB8B1; --ink-3:#7F8E87;
+    --line:#2D3833; --grid:#7A403A;
+    --jade:#3DB38A; --jade-ink:#06140F; --jade-soft:#17332A;
+    --t1:#FF6E64; --t2:#F4AE3D; --t3:#5CCB74; --t4:#77A4FF; --t0:#8E9993;
+    --good:#3DB38A; --good-soft:#17332A; --bad:#FF7A6E; --bad-soft:#3A1F1C; --warn-soft:#3A3020;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101614; --surface:#18201D; --surface-2:#222C28;
+  --ink:#E6EEEA; --ink-2:#AAB8B1; --ink-3:#7F8E87;
+  --line:#2D3833; --grid:#7A403A;
+  --jade:#3DB38A; --jade-ink:#06140F; --jade-soft:#17332A;
+  --t1:#FF6E64; --t2:#F4AE3D; --t3:#5CCB74; --t4:#77A4FF; --t0:#8E9993;
+  --good:#3DB38A; --good-soft:#17332A; --bad:#FF7A6E; --bad-soft:#3A1F1C; --warn-soft:#3A3020;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--ui);font-size:16px;line-height:1.5}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--jade);outline-offset:2px}
+/* Shell: sidebar on wide screens, bottom tab bar on phones */
+.shell{display:grid;grid-template-columns:196px minmax(0,1fr);min-height:100%}
+.side{position:sticky;top:0;align-self:start;height:100vh;height:100dvh;padding:18px 12px;padding-left:max(12px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:4px;border-right:1px solid var(--line);background:var(--surface)}
+.side .logo{display:flex;gap:10px;align-items:center;padding:4px 8px 16px}
+.side .logo b{font-size:1.02rem;line-height:1.15}
+.side .logo small{display:block;color:var(--ink-3);font-size:.74rem;font-weight:400}
+.navbtn{display:flex;align-items:center;gap:10px;border:0;background:transparent;border-radius:10px;padding:10px 12px;font-weight:600;font-size:.95rem;color:var(--ink-2);cursor:pointer;text-align:left;width:100%}
+.navbtn svg{width:20px;height:20px;flex:none}
+.navbtn[aria-current="page"]{background:var(--jade-soft);color:var(--jade)}
+.navbtn .cnt{margin-left:auto;font-size:.74rem;background:var(--jade);color:var(--jade-ink);border-radius:999px;padding:1px 7px;font-variant-numeric:tabular-nums}
+.side .spacer{flex:1}
+.main{min-width:0;max-width:820px;width:100%;margin:0 auto;padding-block:16px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{display:flex;gap:12px;align-items:center;min-width:0}
+.seal{width:42px;height:42px;flex:none;border-radius:11px;background:var(--jade);color:var(--jade-ink);font-family:var(--hz);font-size:25px;font-weight:700;display:grid;place-items:center}
+h1{font-size:1.45rem;line-height:1.15;font-weight:700;margin:0;letter-spacing:-.01em;text-wrap:balance}
+.sub{margin:2px 0 0;color:var(--ink-2);font-size:.88rem}
+.barstats{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-size:.84rem;font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.pill b{color:var(--ink)}
+button.pill{cursor:pointer}
+.pill.hot{border-color:var(--t2);color:var(--t2)}
+@media (max-width:760px){
+  .shell{grid-template-columns:1fr}
+  .side{position:fixed;left:0;right:0;bottom:0;top:auto;height:auto;z-index:20;flex-direction:row;justify-content:space-around;gap:0;padding:6px max(6px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(6px,env(safe-area-inset-left,0px));border-right:0;border-top:1px solid var(--line)}
+  .side .logo,.side .spacer{display:none}
+  .navbtn{flex-direction:column;gap:3px;padding:6px 4px;font-size:.68rem;font-weight:600;width:auto;flex:1;border-radius:8px;align-items:center}
+  .navbtn svg{width:22px;height:22px}
+  .navbtn .cnt{position:absolute;margin:0;transform:translate(14px,-22px);font-size:.66rem;padding:0 5px}
+  .navbtn{position:relative}
+  .main{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  .seal{width:36px;height:36px;font-size:21px}
+  h1{font-size:1.3rem}
+}
+
+/* Home */
+.home{display:flex;flex-direction:column;gap:14px}
+.hero{background:var(--jade);color:var(--jade-ink);border-radius:18px;padding:20px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.hero h2{margin:0 0 4px;font-size:1.35rem;line-height:1.2;text-wrap:balance}
+.hero p{margin:0;opacity:.85;font-size:.95rem;max-width:40ch}
+.hero .primary{background:var(--jade-ink);color:var(--jade);border-color:transparent;flex:none}
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media (max-width:560px){.cards3{grid-template-columns:1fr 1fr}.cards3 .tile:first-child{grid-column:1/-1}}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.tile .k{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);font-weight:600}
+.tile .v{font-size:1.6rem;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile .v small{font-size:.85rem;font-weight:500;color:var(--ink-3)}
+.tile .d{font-size:.84rem;color:var(--ink-2)}
+.ring{width:58px;height:58px;flex:none}
+.ring circle{fill:none;stroke-width:6}
+.ring .bg{stroke:var(--surface-2)}
+.ring .fg{stroke:var(--jade);stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transition:stroke-dasharray .3s}
+.tile.goal{flex-direction:row;align-items:center;gap:14px}
+.tile.goal>div{display:flex;flex-direction:column;gap:4px;min-width:0}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media (max-width:560px){.quick{grid-template-columns:1fr 1fr}}
+.qbtn{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:4px;color:var(--ink);min-width:0}
+.qbtn b{font-size:.95rem}
+.qbtn small{color:var(--ink-3);font-size:.78rem}
+.weaklist{display:flex;flex-direction:column;gap:0}
+.weaklist .item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+.weaklist .item:last-child{border-bottom:0}
+.weaklist .hz{font-family:var(--hz);font-size:1.25rem;min-width:3em}
+.weaklist .py{font-size:.95rem}
+.weaklist .en{color:var(--ink-2);font-size:.9rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.section{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+.section h3{margin:0 0 10px;font-size:1rem;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.section h3 .textbtn{font-size:.85rem;padding:0}
+.chart{width:100%;height:88px;display:block}
+.chart rect{fill:var(--jade)}
+.chart rect.today{fill:var(--t2)}
+.chart text{fill:var(--ink-3);font-size:10px;font-family:var(--ui)}
+.chart line{stroke:var(--line)}
+
+/* Settings */
+.set{display:flex;flex-direction:column;gap:12px}
+.set .section{display:flex;flex-direction:column;gap:12px}
+.srow{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.srow>span:first-child{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.srow .k{font-weight:600}
+.srow .d{font-size:.84rem;color:var(--ink-2)}
+.srow select,.srow input[type=number]{font:inherit;font-size:.95rem;padding:7px 10px;border-radius:9px;border:1px solid var(--line);background:var(--paper);color:var(--ink);max-width:16em}
+.srow input[type=number]{width:5.5em}
+.srow input[type=checkbox]{width:20px;height:20px;accent-color:var(--jade)}
+.lessonlist{display:flex;flex-wrap:wrap;gap:6px}
+.lesson{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:5px 12px;font-size:.86rem;cursor:pointer;color:var(--ink);display:inline-flex;gap:6px;align-items:baseline}
+.lesson em{font-style:normal;color:var(--ink-3)}
+.lesson.in{background:var(--jade-soft);border-color:var(--jade)}
+.lesson.cur{outline:2px solid var(--jade);outline-offset:1px}
+.keys{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:.88rem;color:var(--ink-2)}
+.keys kbd{margin:0;opacity:1;color:var(--ink);border-color:var(--line);padding:0 6px}
+
+.path{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px 12px}
+.path-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.path-head b{font-size:1.15rem;font-variant-numeric:tabular-nums}
+.muted{color:var(--ink-3)}
+.track{position:relative;height:10px;border-radius:5px;background:var(--surface-2);margin:14px 0 4px}
+.fill{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--jade);min-width:4px}
+.tick{position:absolute;top:-4px;width:2px;height:18px;border-radius:1px;background:var(--ink-3);transform:translateX(-1px)}
+.tick.last{transform:translateX(-2px)}
+.tlabels{position:relative;height:36px;font-size:.74rem;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.tl{position:absolute;top:2px;transform:translateX(-50%);text-align:center;line-height:1.25;white-space:nowrap}
+.tl.last{transform:translateX(-100%);text-align:right}
+.tl b{display:block;color:var(--ink-2);font-weight:600}
+.fine{margin:4px 0 0;font-size:.8rem;color:var(--ink-3)}
+
+.label{font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin:0 0 6px}
+.deckgroups{display:flex;flex-direction:column;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:.88rem;cursor:pointer;display:inline-flex;gap:6px;align-items:baseline;color:var(--ink)}
+.chip em{font-style:normal;color:var(--ink-2)}
+.chip small{color:var(--ink-3);font-variant-numeric:tabular-nums;font-size:.78rem}
+.chip[aria-pressed="true"]{background:var(--jade-soft);border-color:var(--jade)}
+
+.modes{display:grid;grid-template-columns:repeat(8,1fr);gap:3px;background:var(--surface-2);padding:4px;border-radius:13px}
+.modes button{border:0;background:transparent;font-weight:600;font-size:.9rem;padding:8px 2px;border-radius:10px;color:var(--ink-2);cursor:pointer}
+.modes button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+@media (max-width:640px){.modes{grid-template-columns:repeat(4,1fr)}}
+.wrwrap{position:relative;display:inline-block;touch-action:none}
+.wrwrap .cell i{opacity:0;color:var(--ink-3);transition:opacity .2s}
+.wrwrap.revealed .cell i{opacity:.55}
+.wrc{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:crosshair}
+.ex{align-self:stretch;border-top:1px dashed var(--line);padding-top:10px;display:flex;flex-direction:column;gap:2px;text-align:left}
+.ex .lab{font-size:.72rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
+.ex .row{justify-content:flex-start}
+.ex .hz{font-family:var(--hz);font-size:1.3rem;line-height:1.4}
+.ex .py{font-size:.98rem;font-weight:500}
+.ex .en{font-size:.92rem;color:var(--ink-2)}
+.gq{font-family:var(--hz);font-size:1.7rem;line-height:1.5;margin:0;text-wrap:balance}
+.gq u{text-decoration:none;border-bottom:2px solid var(--jade);padding:0 .35em;color:var(--jade)}
+
+.stagebar{display:flex;justify-content:space-between;align-items:center;gap:8px 12px;flex-wrap:wrap;margin-bottom:10px}
+.score{font-size:.88rem;color:var(--ink-2);font-variant-numeric:tabular-nums}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--surface-2);border-radius:10px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;padding:5px 11px;border-radius:8px;font-weight:600;font-size:.86rem;color:var(--ink-2);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center}
+.meta{align-self:stretch;display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.84rem;color:var(--ink-3)}
+.tag{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;border-radius:999px;background:var(--jade-soft);color:var(--jade)}
+.face{display:flex;flex-direction:column;align-items:center;gap:10px;min-height:120px;justify-content:center}
+
+.hzbtn{border:0;background:transparent;padding:0;cursor:pointer;border-radius:6px}
+.hzbtn[disabled]{cursor:default}
+.grid{display:flex}
+.cell{width:var(--cs);height:var(--cs);border:1.5px solid var(--grid);position:relative;display:grid;place-items:center;font-family:var(--hz);font-size:calc(var(--cs)*.66);line-height:1;font-weight:500;color:var(--ink)}
+.cell+.cell{border-left:0}
+.cell::before,.cell::after{content:"";position:absolute;pointer-events:none}
+.cell::before{left:0;right:0;top:50%;border-top:1px dashed var(--grid)}
+.cell::after{top:0;bottom:0;left:50%;border-left:1px dashed var(--grid)}
+.cell i{font-style:normal;position:relative;z-index:1}
+.g1,.g2{--cs:104px}.g3{--cs:90px}.g4{--cs:76px}
+@media (max-width:420px){.g1,.g2{--cs:88px}.g3{--cs:76px}.g4{--cs:66px}}
+.sent{font-family:var(--hz);font-size:1.75rem;line-height:1.5;margin:0;text-wrap:balance;color:var(--ink)}
+
+.py{margin:0;font-weight:600;font-size:1.2rem;letter-spacing:.01em}
+.py.big{font-size:1.6rem}
+.t1{color:var(--t1)}.t2{color:var(--t2)}.t3{color:var(--t3)}.t4{color:var(--t4)}.t0{color:var(--t0)}
+.nocolor span{color:inherit!important}
+.en{margin:0;font-size:1.1rem;color:var(--ink);max-width:36ch}
+.en.big{font-size:1.45rem;font-weight:600;text-wrap:balance}
+.pos{margin:0;font-size:.82rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em}
+.hint{margin:0;font-size:.9rem;color:var(--ink-3)}
+.answer{display:flex;flex-direction:column;align-items:center;gap:8px;padding-top:14px;border-top:1px dashed var(--line);align-self:stretch}
+.row{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center}
+
+.primary{background:var(--jade);color:var(--jade-ink);border:1px solid var(--jade);border-radius:12px;padding:11px 18px;font-weight:700;cursor:pointer}
+.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);border-radius:12px;padding:10px 16px;font-weight:600;cursor:pointer}
+.wide{align-self:stretch}
+.btnrow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+kbd{font-family:var(--ui);font-size:.72em;border:1px solid currentColor;border-radius:4px;padding:0 4px;opacity:.7;margin-left:6px}
+.grades{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;align-self:stretch}
+.g{border-radius:12px;padding:9px 6px;border:1.5px solid var(--line);background:var(--surface);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;font-weight:700}
+.g small{font-weight:400;font-size:.78rem;opacity:.8}
+.g.again{border-color:var(--bad);color:var(--bad)}
+.g.good{border-color:var(--jade);background:var(--jade);color:var(--jade-ink)}
+.g.easy{border-color:var(--t4);color:var(--t4)}
+
+.play{border:1px solid var(--line);background:var(--surface);color:var(--jade);border-radius:999px;cursor:pointer;display:inline-grid;place-items:center;flex:none;padding:0}
+.play svg{width:56%;height:56%}
+.play.sm{width:36px;height:36px}
+.play.huge{width:100px;height:100px;background:var(--jade-soft);border:1.5px solid var(--jade)}
+.textbtn{border:0;background:transparent;color:var(--jade);font-weight:600;cursor:pointer;padding:4px 6px;font-size:.9rem}
+
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;align-self:stretch}
+@media (max-width:520px){.opts{grid-template-columns:1fr}}
+.opt{text-align:left;border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:11px 14px;cursor:pointer;display:flex;gap:10px;align-items:baseline;min-width:0;color:var(--ink)}
+.opt .n{font-size:.74rem;color:var(--ink-3);font-weight:700;flex:none}
+.opt:disabled{cursor:default;opacity:1}
+.opt.right,.tonebtn.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong,.tonebtn.wrong{border-color:var(--bad);background:var(--bad-soft)}
+
+.tones4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;align-self:stretch}
+@media (max-width:440px){.tones4{grid-template-columns:repeat(2,1fr)}}
+.tonebtn{border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--ink);min-width:0}
+.tonebtn:disabled{cursor:default}
+.tonebtn .py{font-size:1.35rem;overflow-wrap:anywhere}
+.tonebtn small{color:var(--ink-3);font-size:.74rem}
+.contour{width:38px;height:42px}
+.contour .lv{stroke:var(--line);stroke-width:1}
+.acc{align-self:stretch;display:grid;grid-template-columns:auto 1fr auto;gap:6px 10px;align-items:center;font-size:.84rem;color:var(--ink-2);text-align:left}
+.bar{height:8px;border-radius:4px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:4px}
+
+.pyin{align-self:stretch;display:flex;gap:8px}
+.pyin input{flex:1;min-width:0;font:inherit;font-size:1.25rem;padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink)}
+.pyin input:focus{outline:none;border-color:var(--jade)}
+.pyin input:disabled{opacity:.7}
+.tip{margin:0;font-size:.82rem;color:var(--ink-3);align-self:stretch;text-align:left}
+.fb{align-self:stretch;border-radius:12px;padding:12px 14px;text-align:left;display:flex;flex-direction:column;gap:6px}
+.fb.right{background:var(--good-soft)} .fb.tones{background:var(--warn-soft)} .fb.wrong{background:var(--bad-soft)}
+.fb p{margin:0}
+.fb .lab{font-size:.78rem;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em;margin-right:6px}
+.note{font-size:.88rem;color:var(--ink-2)}
+.notice{align-self:stretch;background:var(--warn-soft);border-radius:12px;padding:10px 14px;font-size:.88rem;text-align:left;color:var(--ink)}
+.notice summary{cursor:pointer;font-weight:600}
+.notice details{margin-top:4px}
+.notice p{margin:0 0 4px}
+.notice p:last-child{margin:0}
+.banner ul{margin:6px 0 10px;padding-left:20px}
+.banner li{margin:3px 0}
+
+.filters{display:flex;flex-wrap:wrap;gap:6px;align-self:stretch}
+.tablewrap{overflow-x:auto;align-self:stretch}
+table{width:100%;border-collapse:collapse;text-align:left;font-size:.95rem}
+th,td{padding:7px 6px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);font-weight:600}
+td.hz{font-family:var(--hz);font-size:1.3rem;line-height:1.3}
+td.hz.short{white-space:nowrap}
+td.py{font-size:1rem;white-space:nowrap}
+td.en{color:var(--ink-2);min-width:9em}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.new{background:var(--line)} .dot.learning{background:var(--t2)} .dot.known{background:var(--jade)} .dot.weak{background:var(--bad)}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.8rem;color:var(--ink-3);align-self:stretch}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+
+.say{align-self:stretch;font-family:var(--hz);font-size:1.4rem;line-height:1.5;padding:12px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--paper);color:var(--ink);min-height:110px;resize:vertical;width:100%}
+.say:focus{outline:none;border-color:var(--jade)}
+.presets{display:flex;flex-wrap:wrap;gap:6px;align-self:stretch}
+.found{align-self:stretch;display:flex;flex-direction:column;gap:2px;text-align:left}
+.found .item{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+.found .hz{font-family:var(--hz);font-size:1.25rem;min-width:3.2em}
+.found .en{font-size:.92rem;color:var(--ink-2);flex:1;min-width:0}
+
+.settings{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;font-size:.9rem;color:var(--ink-2);border-top:1px solid var(--line);padding-top:14px}
+.settings label{display:inline-flex;gap:8px;align-items:center;cursor:pointer}
+.settings input[type=checkbox]{width:18px;height:18px;accent-color:var(--jade)}
+.settings select{font:inherit;font-size:.9rem;padding:5px 8px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);max-width:14em}
+.status{font-size:.84rem;color:var(--ink-3)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.copied{font-size:.85rem;color:var(--jade);font-weight:600}
+@media (prefers-reduced-motion:no-preference){.panel{animation:rise .18s ease-out}@keyframes rise{from{transform:translateY(3px)}to{transform:none}}}
+</style>
+
+<div class="shell">
+  <nav class="side" id="nav" aria-label="Sections"></nav>
+  <div class="main">
+    <header class="bar">
+      <div class="brand">
+        <div class="seal" lang="zh-CN" aria-hidden="true">学</div>
+        <div><h1 id="pageTitle">Today</h1><p class="sub" id="pageSub">Road to HSK 4</p></div>
+      </div>
+      <div class="barstats" id="barStats"></div>
+    </header>
+    <div id="voiceBanner"></div>
+    <main id="stage"></main>
+  </div>
+</div>
+
+<script>
+/*PY-START*/
+var TM = {a:"āáǎà", e:"ēéěè", i:"īíǐì", o:"ōóǒò", u:"ūúǔù", "ü":"ǖǘǚǜ"};
+var MARK = {};
+Object.keys(TM).forEach(function(v){ Array.from(TM[v]).forEach(function(c,i){ MARK[c] = [v, i+1]; }); });
+var VOW = "aeiouü";
+function baseCh(c){ var l = c.toLowerCase(); return MARK[l] ? MARK[l][0] : l; }
+function toneCh(c){ var l = c.toLowerCase(); return MARK[l] ? MARK[l][1] : 0; }
+function isLetter(c){ var l = c.toLowerCase(); return (l >= "a" && l <= "z") || l === "ü" || !!MARK[l]; }
+
+// Split a run of pinyin letters into syllables: "xuésheng" -> ["xué","sheng"].
+function splitChunk(chunk){
+  var ch = Array.from(chunk), b = ch.map(baseCh), n = ch.length;
+  var isV = function(i){ return i < n && VOW.indexOf(b[i]) >= 0; };
+  var out = [], i = 0;
+  while (i < n){
+    var s = i;
+    while (i < n && !isV(i)) i++;
+    while (isV(i)) i++;
+    if (i < n){
+      if (b[i] === "n" && b[i+1] === "g" && !isV(i+2)) i += 2;
+      else if (b[i] === "n" && !isV(i+1)) i += 1;
+      else if (b[i] === "r" && !isV(i+1)) i += 1;
+    }
+    if (i < n && b[i] === "r" && !isV(i+1) && b[i-1] === "n") i += 1;
+    if (i === s) i++;
+    out.push(ch.slice(s, i).join(""));
+  }
+  return out;
+}
+function syllInfo(s){
+  var base = "", tone = 0;
+  Array.from(s).forEach(function(c){ base += baseCh(c); tone = tone || toneCh(c); });
+  return {base: base, tone: tone};
+}
+function chunks(py){
+  var out = [], buf = "";
+  Array.from(py).forEach(function(c){ if (isLetter(c)) buf += c; else { if (buf) out.push(buf); buf = ""; } });
+  if (buf) out.push(buf);
+  return out;
+}
+function pySylls(py){
+  var res = [];
+  chunks(py).forEach(function(c){ splitChunk(c).forEach(function(s){ res.push(syllInfo(s)); }); });
+  return res;
+}
+function markSyl(base, tone){
+  if (!tone) return base;
+  var idx = base.indexOf("a");
+  if (idx < 0) idx = base.indexOf("e");
+  if (idx < 0 && base.indexOf("ou") >= 0) idx = base.indexOf("o");
+  if (idx < 0) for (var k = base.length - 1; k >= 0; k--) if ("iouü".indexOf(base[k]) >= 0){ idx = k; break; }
+  if (idx < 0) return base;
+  return base.slice(0, idx) + TM[base[idx]][tone - 1] + base.slice(idx + 1);
+}
+// Read what the learner typed: tone numbers (ni3hao3), tone marks (nǐhǎo) or no tones.
+function parseInput(raw){
+  var s = String(raw || "").normalize("NFC").toLowerCase().replace(/u:/g, "ü").replace(/v/g, "ü");
+  var out = [], buf = "";
+  function flush(tone){
+    if (!buf) return;
+    if (tone !== null){ var inf = syllInfo(buf); out.push({base: inf.base, tone: (tone >= 1 && tone <= 4) ? tone : 0}); }
+    else splitChunk(buf).forEach(function(x){
+      var inf = syllInfo(x);
+      // A trailing "r" with no vowel belongs to the syllable before it (yi1dian3r).
+      if (!/[aeiouü]/.test(inf.base) && out.length) out[out.length - 1].base += inf.base;
+      else out.push(inf);
+    });
+    buf = "";
+  }
+  Array.from(s).forEach(function(c){
+    if (isLetter(c)) buf += c;
+    else if (c >= "0" && c <= "5") flush(+c);
+    else flush(null);
+  });
+  flush(null);
+  return out;
+}
+function normLetters(s){ return s.replace(/([jqxy])ü/g, "$1u"); }
+// Compare typed pinyin with the answer. kind: right | tones | wrong | empty
+function grade(input, py, hz){
+  var U = parseInput(input), T = pySylls(py);
+  var uL = normLetters(U.map(function(x){ return x.base; }).join(""));
+  var tL = normLetters(T.map(function(x){ return x.base; }).join(""));
+  if (!uL) return {kind: "empty"};
+  if (uL !== tL){
+    var hint = (uL.replace(/ü/g, "u") === tL.replace(/ü/g, "u")) ? "ü" : null;
+    return {kind: "wrong", hint: hint, user: U};
+  }
+  var ok = true, lenient = false;
+  if (U.length === T.length){
+    for (var k = 0; k < T.length; k++){
+      var ut = U[k].tone, tt = T[k].tone;
+      if (ut === tt) continue;
+      if (tt === 0 && ut !== 0){ lenient = true; continue; }
+      if (T[k].base === "bu" && hz.indexOf("不") >= 0 && tt === 2 && ut === 4) continue;
+      if (T[k].base === "yi" && hz.indexOf("一") >= 0 && (tt === 2 || tt === 4) && ut === 1) continue;
+      ok = false;
+    }
+  } else {
+    var a = U.map(function(x){ return x.tone; }).filter(Boolean).join(",");
+    var b = T.map(function(x){ return x.tone; }).filter(Boolean).join(",");
+    ok = a === b;
+  }
+  return {kind: ok ? "right" : "tones", lenient: ok && lenient, user: U};
+}
+function hasThirdPair(T){
+  for (var k = 0; k + 1 < T.length; k++) if (T[k].tone === 3 && T[k+1].tone === 3) return true;
+  return false;
+}
+/*PY-END*/
+</script>
+
+<script>
+(function(){
+"use strict";
+
+// ---------- Vocabulary. Each lesson the class covers gets its own deck. ----------
+const DECKS = [
+ {id:"l1d1", group:"class", name:"L1 · D1", note:"Names", items:[
+  ["你","nǐ","you","pr"],["好","hǎo","good; fine; OK","adj"],["请","qǐng","please; to invite","v"],["问","wèn","to ask (a question)","v"],
+  ["贵","guì","honorable; expensive","adj"],["姓","xìng","surname; to be surnamed","v/n"],["我","wǒ","I; me","pr"],["呢","ne","question particle (and you?)","qp"],
+  ["小姐","xiǎojiě","Miss; young lady","n"],["叫","jiào","to be called; to call","v"],["什么","shénme","what","qpr"],["名字","míngzi","name","n"],
+  ["先生","xiānsheng","Mr.; husband; teacher","n"],["李","Lǐ","Li (a surname); plum","pn"],["王","Wáng","Wang (a surname); king","pn"],
+  ["你好","nǐ hǎo","hello","phrase"],["请问","qǐngwèn","excuse me, may I ask","phrase"],["您","nín","you (polite)","pr"],["您贵姓","nín guì xìng","What is your surname? (polite)","phrase"]
+ ]},
+ {id:"l1d2", group:"class", name:"L1 · D2", note:"Teacher or student", items:[
+  ["是","shì","to be","v"],["老师","lǎoshī","teacher","n"],["吗","ma","question particle (yes/no)","qp"],["不","bù","not; no","adv"],
+  ["学生","xuésheng","student","n"],["也","yě","too; also","adv"],["人","rén","person; people","n"],["中国","Zhōngguó","China","pn"],
+  ["北京","Běijīng","Beijing","pn"],["美国","Měiguó","America","pn"],["纽约","Niǔyuē","New York","pn"],["加纳","Jiānà","Ghana","pn"]
+ ]},
+ {id:"l2d1", group:"class", name:"L2 · D1", note:"Family photo", items:[
+  ["这","zhè","this","pr"],["那","nà","that","pr"],["个","gè","measure word for people and many things","m"],["爸爸","bàba","father; dad","n"],
+  ["妈妈","māma","mother; mom","n"],["的","de","possessive particle ('s)","p"],["照片","zhàopiàn","picture; photo","n"],["张","zhāng","measure word for flat things (photos, paper)","m"],
+  ["女","nǚ","female","adj"],["孩子","háizi","child","n"],["谁","shéi","who","qpr"],["她","tā","she; her","pr"],["姐姐","jiějie","older sister","n"],
+  ["男","nán","male","adj"],["弟弟","dìdi","younger brother","n"],["他","tā","he; him","pr"],["大哥","dàgē","eldest brother","n"],["儿子","érzi","son","n"],
+  ["有","yǒu","to have; to exist","v"],["女儿","nǚ'ér","daughter","n"],["没","méi","not (used with 有)","adv"],["没有","méiyǒu","to not have","v"],["高","gāo","tall; high; Gao (a surname)","adj"]
+ ]},
+ {id:"l2d2", group:"class", name:"L2 · D2", note:"Family & jobs", items:[
+  ["家","jiā","family; home","n"],["几","jǐ","how many; a few","nu"],["口","kǒu","measure word for family members","m"],["哥哥","gēge","older brother","n"],
+  ["两","liǎng","two (before a measure word)","nu"],["妹妹","mèimei","younger sister","n"],["和","hé","and (joins nouns)","conj"],["大姐","dàjiě","eldest sister","n"],
+  ["二姐","èrjiě","second oldest sister","n"],["做","zuò","to do","v"],["工作","gōngzuò","job; to work","n/v"],["律师","lǜshī","lawyer","n"],
+  ["英文","Yīngwén","English (language)","n"],["都","dōu","both; all","adv"],["大学生","dàxuéshēng","college student","n"],["大学","dàxué","university; college","n"],
+  ["医生","yīshēng","doctor; physician","n"],["工程师","gōngchéngshī","engineer","n"],["经理","jīnglǐ","manager","n"],["会计","kuàijì","accountant","n"],
+  ["家庭主妇","jiātíng zhǔfù","housewife","n"],["退休","tuìxiū","to retire","v"],["去","qù","to go","v"],["哪儿","nǎr","where","qpr"],["回家","huí jiā","to go home","phrase"],
+  ["再见","zàijiàn","goodbye","phrase"],["谢谢","xièxie","thank you","phrase"],["不客气","bú kèqi","you're welcome","phrase"],["对不起","duìbuqǐ","sorry","phrase"],
+  ["没关系","méi guānxi","it doesn't matter; that's OK","phrase"],["大家","dàjiā","everyone","pr"]
+ ]},
+ {id:"l3d1", group:"class", name:"L3 · D1", note:"Dates & birthdays", items:[
+  ["月","yuè","month","n"],["号","hào","day of the month; number","n"],["星期","xīngqī","week","n"],["天","tiān","day","n"],["日","rì","day (formal); sun","n"],
+  ["生日","shēngrì","birthday","n"],["年","nián","year","n"],["今年","jīnnián","this year","t"],["多","duō","how (old, many); many","adv"],["大","dà","big; old (in age)","adj"],
+  ["岁","suì","years old","m"],["吃","chī","to eat","v"],["饭","fàn","meal; cooked rice","n"],["怎么样","zěnmeyàng","How is that? Is it OK?","qpr"],
+  ["太…了","tài…le","too...; extremely...","adv"],["喜欢","xǐhuan","to like","v"],["菜","cài","dishes; cuisine","n"],["还是","háishi","or (in questions)","conj"],
+  ["可是","kěshì","but","conj"],["我们","wǒmen","we; us","pr"],["点","diǎn","o'clock","m"],["半","bàn","half; half an hour","nu"],["晚上","wǎnshang","evening; night","n"],
+  ["见","jiàn","to see","v"],["英国","Yīngguó","Britain; England","pn"],["去年","qùnián","last year","t"],["明年","míngnián","next year","t"],
+  ["昨天","zuótiān","yesterday","t"],["今天","jīntiān","today","t"],["明天","míngtiān","tomorrow","t"],["上个月","shàngge yuè","last month","t"],
+  ["这个月","zhège yuè","this month","t"],["下个月","xiàge yuè","next month","t"],["上个星期","shàngge xīngqī","last week","t"],["这个星期","zhège xīngqī","this week","t"],
+  ["下个星期","xiàge xīngqī","next week","t"],["星期一","xīngqīyī","Monday","t"],["星期二","xīngqī'èr","Tuesday","t"],["星期三","xīngqīsān","Wednesday","t"],
+  ["星期四","xīngqīsì","Thursday","t"],["星期五","xīngqīwǔ","Friday","t"],["星期六","xīngqīliù","Saturday","t"],["星期天","xīngqītiān","Sunday","t"]
+ ]},
+ {id:"l3d2", group:"ahead", name:"L3 · D2", note:"Time & invitations", items:[
+  ["现在","xiànzài","now","t"],["刻","kè","quarter (of an hour)","m"],["事","shì","matter; thing; business","n"],["晚饭","wǎnfàn","dinner; supper","n"],
+  ["为什么","wèishénme","why","qpr"],["因为","yīnwèi","because","conj"],["还","hái","also; too; still","adv"],["同学","tóngxué","classmate","n"],
+  ["认识","rènshi","to know (a person); to recognize","v"],["朋友","péngyou","friend","n"],["忙","máng","busy","adj"],["几点","jǐ diǎn","what time","phrase"]
+ ]},
+ {id:"l4d1", group:"ahead", name:"L4 · D1", note:"Hobbies", items:[
+  ["周末","zhōumò","weekend","n"],["打球","dǎ qiú","to play ball","v"],["看","kàn","to watch; to look; to read","v"],["电视","diànshì","television","n"],
+  ["唱歌","chàng gē","to sing","v"],["跳舞","tiào wǔ","to dance","v"],["听","tīng","to listen","v"],["音乐","yīnyuè","music","n"],["书","shū","book","n"],
+  ["对","duì","right; correct","adj"],["有的时候","yǒude shíhou","sometimes","phrase"],["电影","diànyǐng","movie","n"],["常常","chángcháng","often","adv"],
+  ["外国","wàiguó","foreign country","n"],["请客","qǐng kè","to treat (someone to a meal)","v"],["所以","suǒyǐ","so; therefore","conj"]
+ ]},
+ {id:"l4d2", group:"ahead", name:"L4 · D2", note:"Weekend plans", items:[
+  ["好久","hǎojiǔ","a long time","phrase"],["不错","búcuò","not bad; pretty good","adj"],["想","xiǎng","to want to; to think","v"],["觉得","juéde","to feel; to think","v"],
+  ["有意思","yǒu yìsi","interesting","adj"],["意思","yìsi","meaning","n"],["只","zhǐ","only","adv"],["睡觉","shuì jiào","to sleep","v"],
+  ["算了","suàn le","forget it; never mind","phrase"],["找","zhǎo","to look for","v"],["别人","biérén","other people","pr"],["一起","yìqǐ","together","adv"]
+ ]},
+ {id:"l5d1", group:"ahead", name:"L5 · D1", note:"Visiting friends", items:[
+  ["进","jìn","to enter","v"],["快","kuài","fast; quick; hurry","adj"],["进来","jìn lai","to come in","v"],["介绍","jièshào","to introduce","v"],
+  ["一下","yíxià","(softens a verb) a bit","m"],["高兴","gāoxìng","happy; pleased","adj"],["漂亮","piàoliang","pretty","adj"],["坐","zuò","to sit","v"],
+  ["在","zài","at; in","prep"],["学校","xuéxiào","school","n"],["喝","hē","to drink","v"],["茶","chá","tea","n"],["咖啡","kāfēi","coffee","n"],
+  ["吧","ba","particle for suggestions","p"],["要","yào","to want","v"],["瓶","píng","bottle (measure word)","m"],["可乐","kělè","cola","n"],
+  ["可以","kěyǐ","can; may","v"],["给","gěi","to give","v"],["水","shuǐ","water","n"]
+ ]},
+ {id:"l5d2", group:"ahead", name:"L5 · D2", note:"At the library", items:[
+  ["玩儿","wánr","to have fun; to play","v"],["图书馆","túshūguǎn","library","n"],["聊天儿","liáo tiānr","to chat","v"],["才","cái","not until; only then","adv"],
+  ["一点儿","yìdiǎnr","a little","phrase"]
+ ]},
+ {id:"hsk1", group:"hsk", name:"HSK 1", note:"150 words", items:[
+  ["爱","ài","to love"],["八","bā","eight"],["爸爸","bàba","dad"],["杯子","bēizi","cup; glass"],["北京","Běijīng","Beijing"],["本","běn","measure word for books"],
+  ["不","bù","not; no"],["不客气","bú kèqi","you're welcome"],["菜","cài","dish; vegetable"],["茶","chá","tea"],["吃","chī","to eat"],["出租车","chūzūchē","taxi"],
+  ["打电话","dǎ diànhuà","to make a phone call"],["大","dà","big"],["的","de","possessive particle ('s)"],["点","diǎn","o'clock"],["电脑","diànnǎo","computer"],
+  ["电视","diànshì","television"],["电影","diànyǐng","movie"],["东西","dōngxi","thing; stuff"],["都","dōu","both; all"],["读","dú","to read aloud"],
+  ["对不起","duìbuqǐ","sorry"],["多","duō","many; much"],["多少","duōshao","how many; how much"],["儿子","érzi","son"],["二","èr","two"],
+  ["饭店","fàndiàn","restaurant; hotel"],["飞机","fēijī","airplane"],["分钟","fēnzhōng","minute"],["高兴","gāoxìng","happy; glad"],
+  ["个","gè","measure word for people and many things"],["工作","gōngzuò","job; to work"],["狗","gǒu","dog"],["汉语","Hànyǔ","Chinese (language)"],
+  ["好","hǎo","good; fine"],["号","hào","day of the month; number"],["喝","hē","to drink"],["和","hé","and"],["很","hěn","very"],["后面","hòumiàn","behind"],
+  ["回","huí","to return"],["会","huì","can; to know how to"],["几","jǐ","how many; a few"],["家","jiā","family; home"],["叫","jiào","to be called; to call"],
+  ["今天","jīntiān","today"],["九","jiǔ","nine"],["开","kāi","to open; to drive"],["看","kàn","to look; to watch"],["看见","kànjiàn","to see"],
+  ["块","kuài","yuan (money); piece"],["来","lái","to come"],["老师","lǎoshī","teacher"],["了","le","particle for change or completed action"],["冷","lěng","cold"],
+  ["里","lǐ","inside"],["六","liù","six"],["妈妈","māma","mom"],["吗","ma","question particle (yes/no)"],["买","mǎi","to buy"],["猫","māo","cat"],
+  ["没关系","méi guānxi","it doesn't matter"],["没有","méiyǒu","to not have; there is not"],["米饭","mǐfàn","cooked rice"],["名字","míngzi","name"],
+  ["明天","míngtiān","tomorrow"],["哪","nǎ","which"],["哪儿","nǎr","where"],["那","nà","that"],["呢","ne","question particle (and you?)"],["能","néng","can; to be able to"],
+  ["你","nǐ","you"],["年","nián","year"],["女儿","nǚ'ér","daughter"],["朋友","péngyou","friend"],["漂亮","piàoliang","pretty; beautiful"],["苹果","píngguǒ","apple"],
+  ["七","qī","seven"],["前面","qiánmiàn","in front"],["钱","qián","money"],["请","qǐng","please; to invite"],["去","qù","to go"],["热","rè","hot"],
+  ["人","rén","person; people"],["认识","rènshi","to know (a person)"],["三","sān","three"],["商店","shāngdiàn","shop; store"],["上","shàng","up; on; above"],
+  ["上午","shàngwǔ","morning"],["少","shǎo","few; little"],["谁","shéi","who"],["什么","shénme","what"],["十","shí","ten"],["时候","shíhou","time; moment"],
+  ["是","shì","to be"],["书","shū","book"],["水","shuǐ","water"],["水果","shuǐguǒ","fruit"],["睡觉","shuìjiào","to sleep"],["说","shuō","to speak; to say"],
+  ["四","sì","four"],["岁","suì","years old"],["他","tā","he; him"],["她","tā","she; her"],["太","tài","too; extremely"],["天气","tiānqì","weather"],
+  ["听","tīng","to listen"],["同学","tóngxué","classmate"],["喂","wèi","hello (on the phone)"],["我","wǒ","I; me"],["我们","wǒmen","we; us"],["五","wǔ","five"],
+  ["喜欢","xǐhuan","to like"],["下","xià","down; below; next"],["下午","xiàwǔ","afternoon"],["下雨","xià yǔ","to rain"],["先生","xiānsheng","Mr.; sir; husband"],
+  ["现在","xiànzài","now"],["想","xiǎng","to want; to think; to miss"],["小","xiǎo","small; little"],["小姐","xiǎojiě","Miss; young lady"],["些","xiē","some"],
+  ["写","xiě","to write"],["谢谢","xièxie","thank you"],["星期","xīngqī","week"],["学生","xuésheng","student"],["学习","xuéxí","to study"],["学校","xuéxiào","school"],
+  ["一","yī","one"],["一点儿","yìdiǎnr","a little"],["衣服","yīfu","clothes"],["医生","yīshēng","doctor"],["医院","yīyuàn","hospital"],["椅子","yǐzi","chair"],
+  ["有","yǒu","to have; there is"],["月","yuè","month; moon"],["在","zài","at; in; to be (somewhere)"],["再见","zàijiàn","goodbye"],["怎么","zěnme","how"],
+  ["怎么样","zěnmeyàng","how is it; how about"],["这","zhè","this"],["中国","Zhōngguó","China"],["中午","zhōngwǔ","noon"],["住","zhù","to live (somewhere)"],
+  ["桌子","zhuōzi","table; desk"],["字","zì","character; word"],["昨天","zuótiān","yesterday"],["坐","zuò","to sit; to travel by"],["做","zuò","to do; to make"]
+ ]},
+ {id:"hsk2", group:"hsk", name:"HSK 2", note:"next level", items:[
+  ["吧","ba","particle for suggestions"],["白","bái","white"],["百","bǎi","hundred"],["帮助","bāngzhù","to help"],["报纸","bàozhǐ","newspaper"],["比","bǐ","than; compared with"],
+  ["别","bié","don't"],["宾馆","bīnguǎn","hotel"],["长","cháng","long"],["唱歌","chàng gē","to sing"],["出","chū","to go out; to come out"],["穿","chuān","to wear; to put on"],
+  ["次","cì","time (occurrence)"],["从","cóng","from"],["错","cuò","wrong; mistake"],["打篮球","dǎ lánqiú","to play basketball"],["大家","dàjiā","everyone"],
+  ["到","dào","to arrive; to"],["得","de","particle (verb + how well)"],["等","děng","to wait"],["弟弟","dìdi","younger brother"],["第一","dì-yī","first"],
+  ["懂","dǒng","to understand"],["对","duì","right; correct; to, toward"],["房间","fángjiān","room"],["非常","fēicháng","very; extremely"],["服务员","fúwùyuán","waiter; attendant"],
+  ["高","gāo","tall; high"],["告诉","gàosu","to tell"],["哥哥","gēge","older brother"],["给","gěi","to give; for"],["公共汽车","gōnggòng qìchē","bus"],["公司","gōngsī","company"],
+  ["贵","guì","expensive"],["过","guo","particle for past experience"],["还","hái","still; also"],["孩子","háizi","child"],["好吃","hǎochī","delicious"],["黑","hēi","black; dark"],
+  ["红","hóng","red"],["火车站","huǒchēzhàn","train station"],["机场","jīchǎng","airport"],["鸡蛋","jīdàn","egg"],["件","jiàn","measure word for clothes and matters"],
+  ["教室","jiàoshì","classroom"],["姐姐","jiějie","older sister"],["介绍","jièshào","to introduce"],["进","jìn","to enter"],["近","jìn","near; close"],["就","jiù","just; then; right away"],
+  ["觉得","juéde","to feel; to think"],["咖啡","kāfēi","coffee"],["开始","kāishǐ","to begin"],["考试","kǎoshì","exam; to take an exam"],["可能","kěnéng","maybe; possible"],
+  ["可以","kěyǐ","can; may"],["课","kè","class; lesson"],["快","kuài","fast; quick"],["快乐","kuàilè","happy"],["累","lèi","tired"],["离","lí","away from"],["两","liǎng","two"],
+  ["零","líng","zero"],["路","lù","road; route"],["旅游","lǚyóu","to travel; tourism"],["卖","mài","to sell"],["慢","màn","slow"],["忙","máng","busy"],["每","měi","every; each"],
+  ["妹妹","mèimei","younger sister"],["门","mén","door"],["面条","miàntiáo","noodles"],["男","nán","male"],["您","nín","you (polite)"],["牛奶","niúnǎi","milk"],["女","nǚ","female"],
+  ["旁边","pángbiān","beside; next to"],["跑步","pǎo bù","to run; to jog"],["便宜","piányi","cheap"],["票","piào","ticket"],["妻子","qīzi","wife"],["起床","qǐ chuáng","to get up"],
+  ["千","qiān","thousand"],["铅笔","qiānbǐ","pencil"],["晴","qíng","sunny; clear"],["去年","qùnián","last year"],["让","ràng","to let; to make (someone do)"],["日","rì","day; sun"],
+  ["上班","shàng bān","to go to work"],["身体","shēntǐ","body; health"],["生病","shēng bìng","to get sick"],["生日","shēngrì","birthday"],["时间","shíjiān","time"],
+  ["事情","shìqing","matter; thing"],["手表","shǒubiǎo","wristwatch"],["手机","shǒujī","mobile phone"],["说话","shuō huà","to speak; to talk"],["送","sòng","to give (a gift); to see off"],
+  ["虽然…但是","suīrán…dànshì","although... still..."],["它","tā","it"],["踢足球","tī zúqiú","to play football (soccer)"],["题","tí","question; problem (on a test)"],
+  ["跳舞","tiào wǔ","to dance"],["外","wài","outside"],["完","wán","to finish"],["玩","wán","to play; to have fun"],["晚上","wǎnshang","evening"],["往","wǎng","toward"],
+  ["为什么","wèishénme","why"],["问","wèn","to ask"],["问题","wèntí","question; problem"],["西瓜","xīguā","watermelon"],["希望","xīwàng","to hope"],["洗","xǐ","to wash"],
+  ["小时","xiǎoshí","hour"],["笑","xiào","to laugh; to smile"],["新","xīn","new"],["姓","xìng","surname; to be surnamed"],["休息","xiūxi","to rest"],["雪","xuě","snow"],
+  ["颜色","yánsè","color"],["眼睛","yǎnjing","eye"],["羊肉","yángròu","mutton; lamb"],["药","yào","medicine"],["要","yào","to want; will"],["也","yě","also; too"],
+  ["一起","yìqǐ","together"],["一下","yíxià","(softens a verb) a bit"],["已经","yǐjīng","already"],["意思","yìsi","meaning"],["因为…所以","yīnwèi…suǒyǐ","because... so..."],
+  ["阴","yīn","cloudy; overcast"],["游泳","yóu yǒng","to swim"],["右边","yòubian","right side"],["鱼","yú","fish"],["远","yuǎn","far"],["运动","yùndòng","sports; to exercise"],
+  ["再","zài","again"],["早上","zǎoshang","early morning"],["丈夫","zhàngfu","husband"],["找","zhǎo","to look for; to give change"],["着","zhe","particle for an ongoing state"],
+  ["真","zhēn","really; truly"],["正在","zhèngzài","in the middle of (doing)"],["知道","zhīdào","to know"],["准备","zhǔnbèi","to prepare; to plan to"],["走","zǒu","to walk; to leave"],
+  ["最","zuì","most"],["左边","zuǒbian","left side"]
+ ]},
+ {id:"sent", group:"sent", name:"Sentences", note:"Lessons 1–3", sent:true, items:[
+  ["你好！","Nǐ hǎo!","Hello!"],["请问，您贵姓？","Qǐngwèn, nín guì xìng?","Excuse me, what is your surname?"],["我姓王，你呢？","Wǒ xìng Wáng, nǐ ne?","My surname is Wang. And yours?"],
+  ["你叫什么名字？","Nǐ jiào shénme míngzi?","What is your name?"],["我叫李友。","Wǒ jiào Lǐ Yǒu.","My name is Li You."],["你是老师吗？","Nǐ shì lǎoshī ma?","Are you a teacher?"],
+  ["我不是老师，我是学生。","Wǒ bú shì lǎoshī, wǒ shì xuésheng.","I'm not a teacher. I'm a student."],["你是中国人吗？","Nǐ shì Zhōngguó rén ma?","Are you Chinese?"],
+  ["我是加纳人。","Wǒ shì Jiānà rén.","I'm Ghanaian."],["他也是学生。","Tā yě shì xuésheng.","He is a student too."],["李小姐是北京人。","Lǐ xiǎojiě shì Běijīng rén.","Miss Li is from Beijing."],
+  ["王老师不是美国人。","Wáng lǎoshī bú shì Měiguó rén.","Teacher Wang is not American."],["这是我的照片。","Zhè shì wǒ de zhàopiàn.","This is my photo."],
+  ["这个女孩子是谁？","Zhège nǚ háizi shì shéi?","Who is this girl?"],["她是我姐姐。","Tā shì wǒ jiějie.","She is my older sister."],
+  ["那个男孩子是我弟弟。","Nàge nán háizi shì wǒ dìdi.","That boy is my younger brother."],["这是谁的照片？","Zhè shì shéi de zhàopiàn?","Whose photo is this?"],
+  ["你有哥哥吗？","Nǐ yǒu gēge ma?","Do you have an older brother?"],["我没有哥哥。","Wǒ méiyǒu gēge.","I don't have an older brother."],
+  ["王先生有一个儿子和两个女儿。","Wáng xiānsheng yǒu yí ge érzi hé liǎng ge nǚ'ér.","Mr. Wang has one son and two daughters."],
+  ["你家有几口人？","Nǐ jiā yǒu jǐ kǒu rén?","How many people are in your family?"],["我家有七口人。","Wǒ jiā yǒu qī kǒu rén.","There are seven people in my family."],
+  ["你爸爸做什么工作？","Nǐ bàba zuò shénme gōngzuò?","What does your dad do?"],["我爸爸是老师。","Wǒ bàba shì lǎoshī.","My dad is a teacher."],
+  ["我妈妈是医生。","Wǒ māma shì yīshēng.","My mom is a doctor."],["我有两个妹妹。","Wǒ yǒu liǎng ge mèimei.","I have two younger sisters."],
+  ["你有几个弟弟？","Nǐ yǒu jǐ ge dìdi?","How many younger brothers do you have?"],["我大姐是英文老师。","Wǒ dàjiě shì Yīngwén lǎoshī.","My eldest sister is an English teacher."],
+  ["我哥哥和我都是大学生。","Wǒ gēge hé wǒ dōu shì dàxuéshēng.","My older brother and I are both college students."],
+  ["我爸爸妈妈都不是律师。","Wǒ bàba māma dōu bú shì lǜshī.","Neither of my parents is a lawyer."],
+  ["我的弟弟妹妹不都是学生。","Wǒ de dìdi mèimei bù dōu shì xuésheng.","Not all of my younger siblings are students."],
+  ["这张照片是我家的照片。","Zhè zhāng zhàopiàn shì wǒ jiā de zhàopiàn.","This is a photo of my family."],["你去哪儿？我回家。","Nǐ qù nǎr? Wǒ huí jiā.","Where are you going? I'm going home."],
+  ["谢谢！不客气！","Xièxie! Bú kèqi!","Thank you! You're welcome!"],["对不起！没关系！","Duìbuqǐ! Méi guānxi!","Sorry! That's OK."],
+  ["今天几月几号？","Jīntiān jǐ yuè jǐ hào?","What is the date today?"],["今天九月十二号，星期四。","Jīntiān jiǔ yuè shí'èr hào, xīngqīsì.","Today is Thursday, September 12."],
+  ["你的生日是几月几号？","Nǐ de shēngrì shì jǐ yuè jǐ hào?","When is your birthday?"],["你今年多大？","Nǐ jīnnián duō dà?","How old are you this year?"],
+  ["我今年十八岁。","Wǒ jīnnián shíbā suì.","I'm eighteen this year."],["我请你吃晚饭，怎么样？","Wǒ qǐng nǐ chī wǎnfàn, zěnmeyàng?","I'll treat you to dinner. How about it?"],
+  ["太好了！谢谢你！","Tài hǎo le! Xièxie nǐ!","Great! Thank you!"],["你喜欢吃中国菜还是美国菜？","Nǐ xǐhuan chī Zhōngguó cài háishi Měiguó cài?","Do you like Chinese food or American food?"],
+  ["我是英国人，可是我喜欢吃中国菜。","Wǒ shì Yīngguó rén, kěshì wǒ xǐhuan chī Zhōngguó cài.","I'm British, but I like Chinese food."],
+  ["晚上七点半见。","Wǎnshang qī diǎn bàn jiàn.","See you at 7:30 this evening."],["现在几点？","Xiànzài jǐ diǎn?","What time is it now?"]
+ ]}
+];
+const GROUPS = [["class","From your class slides"],["ahead","Ahead of class (textbook)"],["hsk","HSK word lists"],["sent","Listening sentences"]];
+
+// Four tones on one syllable, for ear training. Characters chosen to have one common reading.
+const TONE_SETS = [
+ ["ma",["妈","mā","mother"],["麻","má","numb; hemp"],["马","mǎ","horse"],["骂","mà","to scold"]],
+ ["ba",["八","bā","eight"],["拔","bá","to pull out"],["把","bǎ","to hold"],["爸","bà","dad"]],
+ ["shi",["师","shī","teacher"],["十","shí","ten"],["使","shǐ","to use"],["是","shì","to be"]],
+ ["tang",["汤","tāng","soup"],["糖","táng","sugar"],["躺","tǎng","to lie down"],["烫","tàng","scalding hot"]],
+ ["wu",["屋","wū","room; house"],["无","wú","none"],["五","wǔ","five"],["雾","wù","fog"]],
+ ["yi",["衣","yī","clothes"],["姨","yí","aunt"],["椅","yǐ","chair"],["意","yì","meaning"]],
+ ["fei",["飞","fēi","to fly"],["肥","féi","fat"],["匪","fěi","bandit"],["费","fèi","fee"]],
+ ["wen",["温","wēn","warm"],["文","wén","writing; language"],["吻","wěn","kiss"],["问","wèn","to ask"]],
+ ["ji",["鸡","jī","chicken"],["急","jí","urgent"],["挤","jǐ","to squeeze"],["记","jì","to remember"]],
+ ["shu",["书","shū","book"],["熟","shú","ripe; familiar"],["鼠","shǔ","mouse"],["树","shù","tree"]],
+ ["qi",["七","qī","seven"],["骑","qí","to ride"],["起","qǐ","to rise"],["气","qì","air; anger"]],
+ ["yan",["烟","yān","smoke"],["盐","yán","salt"],["眼","yǎn","eye"],["验","yàn","to test"]],
+ ["tu",["突","tū","sudden"],["图","tú","picture"],["土","tǔ","soil"],["兔","tù","rabbit"]],
+ ["chi",["吃","chī","to eat"],["迟","chí","late"],["尺","chǐ","ruler"],["赤","chì","red"]],
+ ["fu",["夫","fū","husband"],["福","fú","good fortune"],["府","fǔ","mansion"],["父","fù","father"]],
+ ["hu",["呼","hū","to breathe out"],["湖","hú","lake"],["虎","hǔ","tiger"],["户","hù","household"]],
+ ["tong",["通","tōng","to go through"],["同","tóng","same"],["桶","tǒng","bucket"],["痛","tòng","pain"]],
+ ["xiang",["香","xiāng","fragrant"],["详","xiáng","detailed"],["想","xiǎng","to think"],["向","xiàng","toward"]]
+];
+const CHAO = {1:"55 high, level",2:"35 rising",3:"214 dip, rise",4:"51 falling"};
+const CONTOUR = {1:"3,5 27,5",2:"3,18 27,5",3:"3,24 15,33 27,11",4:"3,5 27,33"};
+
+// Grammar points from the Lesson 1–3 slides. q has a ___ gap; a is the index of the right option.
+const GRAMMAR = [
+ {q:"你是老师___？", en:"Are you a teacher?", opts:["吗","呢","的"], a:0, why:"吗 at the end turns a statement into a yes/no question."},
+ {q:"我姓李，你___？", en:"My surname is Li. And you?", opts:["呢","吗","也"], a:0, why:"呢 asks the same question back when the context is already clear."},
+ {q:"我___有哥哥。", en:"I don't have an older brother.", opts:["没","不","也"], a:0, why:"有 is negated with 没, never with 不."},
+ {q:"我___是学生。", en:"I am not a student.", opts:["不","没","都"], a:0, why:"是 and most verbs are negated with 不."},
+ {q:"我有___个妹妹。", en:"I have two younger sisters.", opts:["两","二","几"], a:0, why:"Before a measure word, two is 两."},
+ {q:"三十___个学生", en:"thirty-two students", opts:["二","两","几"], a:0, why:"Inside a number like 32, two is 二."},
+ {q:"王朋和李友___是学生。", en:"Wang Peng and Li You are both students.", opts:["都","也","和"], a:0, why:"都 sums up a group. It goes after the subject and before the verb."},
+ {q:"这是___照片。", en:"This is my photo.", opts:["我的","的我","我是"], a:0, why:"的 marks possession and follows the owner: 我的照片."},
+ {q:"Which is correct?", en:"I am a student too.", opts:["我也是学生。","也我是学生。","我是也学生。"], a:0, why:"也 sits after the subject and before the verb."},
+ {q:"一___照片", en:"one photo", opts:["张","个","口"], a:0, why:"张 is the measure word for flat things such as photos and paper."},
+ {q:"一___老师", en:"one teacher", opts:["个","张","口"], a:0, why:"个 is the measure word for people and most things."},
+ {q:"我家有七___人。", en:"There are seven people in my family.", opts:["口","个","张"], a:0, why:"Family members are counted with 口."},
+ {q:"他不是老师，我___不是老师。", en:"He isn't a teacher, and neither am I.", opts:["也","都","和"], a:0, why:"也 comes before 不: 也不是."},
+ {q:"Which is correct?", en:"Who is she?", opts:["她是谁？","谁是她？","她谁是？"], a:0, why:"The question word sits where the answer would be: 她是王老师 → 她是谁？"},
+ {q:"我爸爸___我妈妈都是老师。", en:"My dad and my mom are both teachers.", opts:["和","也","都"], a:0, why:"和 joins two nouns. It does not join sentences."},
+ {q:"你家有___口人？", en:"How many people are in your family?", opts:["几","什么","谁"], a:0, why:"几 asks how many, for small numbers, and takes a measure word."},
+ {q:"你爸爸做___工作？", en:"What does your dad do?", opts:["什么","几","谁"], a:0, why:"什么 means what."},
+ {q:"王朋、李友、高文中___不是老师。", en:"None of them is a teacher.", opts:["都","不都","也"], a:0, why:"都不 means none of them. 不都 would mean not all of them."},
+ {q:"他们___是学生。", en:"Not all of them are students.", opts:["不都","都不","也不"], a:0, why:"不都 means not all. 都不 would mean none."},
+ {q:"我今年十八___。", en:"I'm eighteen this year.", opts:["岁","年","号"], a:0, why:"Age is counted with 岁."},
+ {q:"今天九月十二___。", en:"Today is September 12.", opts:["号","岁","点"], a:0, why:"号 marks the day of the month in speech."},
+ {q:"你喜欢中国菜___美国菜？", en:"Do you like Chinese food or American food?", opts:["还是","和","也"], a:0, why:"还是 means or in a question that offers a choice."},
+ {q:"___好了！", en:"Great!", opts:["太…了：太好了","很好了","都好了"], a:0, why:"太 + adjective + 了 means too or extremely."},
+ {q:"我是英国人，___我喜欢中国菜。", en:"I'm British, but I like Chinese food.", opts:["可是","和","还是"], a:0, why:"可是 means but and joins two clauses."},
+ {q:"晚上七___半见。", en:"See you at 7:30 this evening.", opts:["点","号","岁"], a:0, why:"点 means o'clock, and 半 adds the half hour."},
+ {q:"请问，您贵___？", en:"May I ask your surname?", opts:["姓","叫","名字"], a:0, why:"贵姓 is the polite way to ask a surname. Drop 贵 in the answer: 我姓王."},
+ {q:"你___什么名字？", en:"What is your name?", opts:["叫","姓","是"], a:0, why:"叫 means to be called and takes a full name or a given name."},
+ {q:"这___男孩子是谁？", en:"Who is this boy?", opts:["个","张","口"], a:0, why:"这 and 那 need a measure word before the noun: 这个男孩子."},
+ {q:"谁___妹妹？", en:"Who has a younger sister?", opts:["有","是","做"], a:0, why:"有 means to have."},
+ {q:"去年、今年、___", en:"last year, this year, ...", opts:["明年","明天","昨天"], a:0, why:"年 is year: 去年, 今年, 明年. 天 is day: 昨天, 今天, 明天."},
+ {q:"上个星期、这个星期、___", en:"last week, this week, ...", opts:["下个星期","明个星期","去个星期"], a:0, why:"Weeks and months use 上个 / 这个 / 下个."},
+ {q:"星期___是 Sunday。", en:"Sunday", opts:["天","七","日子"], a:0, why:"Sunday is 星期天 or 星期日. There is no 星期七."}
+];
+
+const PRESETS = [
+ ["My family intro","大家好！我是加纳人。我家有七口人：爸爸、妈妈、两个弟弟、两个妹妹和我。我是大哥。这张照片是我家的照片。这是我爸爸，我爸爸是老师。这是我妈妈，我妈妈是商人。这是我女朋友，她是律师。我的两个妹妹都是学生。我大妹妹是大学生，我小妹妹是小学生。我大弟弟做建筑工作。我小弟弟也是学生，他是高中生。谢谢！再见！"],
+ ["Four tones","妈，麻，马，骂。八，拔，把，爸。"],
+ ["Numbers 1–10","一，二，三，四，五，六，七，八，九，十。"],
+ ["Days of the week","星期一，星期二，星期三，星期四，星期五，星期六，星期天。"],
+ ["Greetings","你好！请问，您贵姓？我叫什么名字？谢谢！不客气！再见！"]
+];
+
+// ---------- Derived word tables ----------
+const BY_DECK = {};
+DECKS.forEach(d => { BY_DECK[d.id] = d.items.map(a => ({hz:a[0], py:a[1], en:a[2], pos:a[3]||"", deck:d.id, sent:!!d.sent})); });
+const DICT = new Map();
+DECKS.forEach(d => BY_DECK[d.id].forEach(it => { if (!DICT.has(it.hz)) DICT.set(it.hz, it); }));
+const DECK_BY_ID = Object.fromEntries(DECKS.map(d => [d.id, d]));
+const POS = {pr:"pronoun",adj:"adjective",v:"verb",n:"noun","v/n":"verb / noun","n/v":"noun / verb",qp:"question particle",qpr:"question word",m:"measure word",nu:"number",adv:"adverb",p:"particle",conj:"conjunction",pn:"name",phrase:"phrase",t:"time word",prep:"preposition"};
+const INTERVALS = [0,1,2,4,7,14,30,60];
+const NEW_PER = 10;
+
+// ---------- Small helpers ----------
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const rand = n => Math.floor(Math.random()*n);
+const shuffle = a => { a = a.slice(); for (let i = a.length-1; i > 0; i--){ const j = rand(i+1); [a[i],a[j]] = [a[j],a[i]]; } return a; };
+const today = () => Math.floor((Date.now() - new Date().getTimezoneOffset()*60000)/86400000);
+const days = n => n <= 0 ? "today" : n === 1 ? "1 day" : n + " days";
+function readJSON(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } }
+function writeJSON(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+
+const SPEAKER = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a4.5 4.5 0 0 1 0 7M18.6 6a8 8 0 0 1 0 12" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>';
+const playBtn = (text, cls, label) => `<button class="play ${cls||"sm"}" data-act="say" data-text="${esc(text)}" aria-label="${esc(label||"Play pronunciation")}">${SPEAKER}</button>`;
+
+function pyHTML(py){
+  let out = "", buf = "";
+  const flush = () => { if (!buf) return; splitChunk(buf).forEach(s => { out += `<span class="t${syllInfo(s).tone}">${esc(s)}</span>`; }); buf = ""; };
+  for (const c of py){ if (isLetter(c)) buf += c; else { flush(); out += esc(c); } }
+  flush();
+  return out;
+}
+function syllsHTML(arr){
+  return arr.map((s, k) => (k > 0 && /^[aeo]/.test(s.base) ? "'" : "") + `<span class="t${s.tone}">${esc(markSyl(s.base, s.tone))}</span>`).join("");
+}
+function hzBlock(hz, playable){
+  const chars = Array.from(hz);
+  const inner = (chars.length <= 4 && !/[，。？！、：…,.?!\s]/.test(hz))
+    ? `<div class="grid g${chars.length}" lang="zh-CN">${chars.map(c => `<span class="cell"><i>${esc(c)}</i></span>`).join("")}</div>`
+    : `<p class="sent" lang="zh-CN">${esc(hz)}</p>`;
+  return playable
+    ? `<button class="hzbtn" data-act="say" data-text="${esc(hz)}" aria-label="Play ${esc(hz)}" title="Tap to hear it">${inner}</button>`
+    : inner;
+}
+const seg = (act, opts, cur) => `<div class="seg" role="group">${opts.map(([v,l]) => `<button data-act="${act}" data-v="${v}" aria-pressed="${v===cur}">${esc(l)}</button>`).join("")}</div>`;
+
+// ---------- UI preferences (this browser) ----------
+const UI_KEY = "road-hsk4-ui-v1", PROG_KEY = "road-hsk4-progress-v1";
+const APP_VERSION = "1.1.0";
+const LESSONS = DECKS.filter(d => d.group === "class" || d.group === "ahead");
+const EXTRAS = DECKS.filter(d => d.group === "hsk" || d.group === "sent");
+const ui = Object.assign({view:"home", mode:"cards", studyMode:"cards", drillMode:"pinyin", upTo:"l3d1", extras:["sent"], goal:40, theme:"system",
+  slow:false, pinyinFront:false, cardDir:"read", listenSub:"pick", toneSub:"syll", listFilter:"all", sayText:PRESETS[0][1]}, readJSON(UI_KEY) || {});
+// Older saves kept a list of decks; turn it into "up to lesson X" plus extras.
+if (Array.isArray(ui.decks)){
+  const picked = LESSONS.filter(d => ui.decks.includes(d.id));
+  if (picked.length) ui.upTo = picked[picked.length - 1].id;
+  ui.extras = EXTRAS.filter(d => ui.decks.includes(d.id)).map(d => d.id);
+  delete ui.decks;
+}
+if (!DECK_BY_ID[ui.upTo]) ui.upTo = "l3d1";
+ui.extras = (Array.isArray(ui.extras) ? ui.extras : []).filter(id => DECK_BY_ID[id]);
+if (!["home","study","drills","words","speak","settings"].includes(ui.view)) ui.view = "home";
+ui.goal = Math.max(10, Math.min(300, +ui.goal || 40));
+const saveUI = () => writeJSON(UI_KEY, ui);
+function applyTheme(){
+  try {
+    const root = document.documentElement;
+    if (ui.theme === "dark" || ui.theme === "light") root.setAttribute("data-theme", ui.theme);
+    else if (ui.themeSetByPage) root.removeAttribute("data-theme");
+    ui.themeSetByPage = ui.theme !== "system";
+  } catch(e){}
+}
+
+// ---------- Progress: saved in this browser, and in the viewer's own account when available ----------
+function blankProgress(){ return {cards:{}, days:[], daily:{}, tones:[[0,0],[0,0],[0,0],[0,0],[0,0]], updatedAt:0}; }
+function serialize(p){
+  const t = today(), daily = {};
+  Object.entries(p.daily).forEach(([d,n]) => { if (+d > t - 60) daily[d] = n; });
+  return {v:2, updatedAt:p.updatedAt, days:p.days.slice(-120), daily, tones:p.tones,
+    cards:Object.entries(p.cards).map(([h,c]) => [h, c.b, c.due, c.r, c.w, c.t])};
+}
+function deserialize(o){
+  const p = blankProgress();
+  if (!o || typeof o !== "object") return p;
+  if (Array.isArray(o.cards)) o.cards.forEach(a => { if (Array.isArray(a) && typeof a[0] === "string") p.cards[a[0]] = {b:+a[1]||0, due:+a[2]||0, r:+a[3]||0, w:+a[4]||0, t:+a[5]||0}; });
+  if (Array.isArray(o.days)) p.days = o.days.filter(n => typeof n === "number");
+  if (o.daily && typeof o.daily === "object") Object.entries(o.daily).forEach(([d,n]) => { if (/^\d+$/.test(d) && typeof n === "number") p.daily[d] = n; });
+  if (Array.isArray(o.tones) && o.tones.length === 5) p.tones = o.tones.map(x => Array.isArray(x) ? [+x[0]||0, +x[1]||0] : [0,0]);
+  p.updatedAt = +o.updatedAt || 0;
+  return p;
+}
+let progress = deserialize(readJSON(PROG_KEY));
+function mergeIn(other){
+  Object.entries(other.cards).forEach(([h,c]) => { const m = progress.cards[h]; if (!m || c.t > m.t) progress.cards[h] = c; });
+  progress.days = Array.from(new Set(progress.days.concat(other.days))).sort((a,b) => a-b).slice(-120);
+  Object.entries(other.daily).forEach(([d,n]) => { progress.daily[d] = Math.max(progress.daily[d] || 0, n); });
+  const sum = t => t.reduce((s,x) => s + x[0] + x[1], 0);
+  if (sum(other.tones) > sum(progress.tones)) progress.tones = other.tones;
+  progress.updatedAt = Math.max(progress.updatedAt, other.updatedAt);
+}
+let remote = null, syncState = "local", saveTimer = null, saving = false, again = false;
+function save(){
+  progress.updatedAt = Date.now();
+  writeJSON(PROG_KEY, serialize(progress));
+  if (remote){ clearTimeout(saveTimer); saveTimer = setTimeout(flush, 2500); }
+}
+async function flush(){
+  if (!remote) return;
+  if (saving){ again = true; return; }
+  saving = true;
+  try { await remote.set(serialize(progress)); syncState = "account"; }
+  catch(e){
+    if (e && e.code === "unavailable"){ setTimeout(flush, 4000 + rand(3000)); }
+    else { remote = null; syncState = "local"; }
+  }
+  saving = false;
+  renderSettings();
+  if (again){ again = false; flush(); }
+}
+document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden" && remote && saveTimer){ clearTimeout(saveTimer); saveTimer = null; flush(); } });
+async function initRemote(){
+  if (!window.claude || typeof window.claude.use !== "function") return;
+  try {
+    const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+    if (!db || !user) return;
+    const uid = await user.id();
+    if (!uid) return;
+    const ref = db.doc("data/users/" + uid + "/progress");
+    const snap = await ref.get();
+    const before = JSON.stringify(serialize(progress));
+    if (snap.exists) mergeIn(deserialize(snap.data()));
+    remote = ref; syncState = "account";
+    writeJSON(PROG_KEY, serialize(progress));
+    const theirs = snap.exists ? JSON.stringify(serialize(deserialize(snap.data()))) : "";
+    if (JSON.stringify(serialize(progress)) !== theirs) flush();
+    if (JSON.stringify(serialize(progress)) !== before){ cq = null; renderAll(); } else renderSettings();
+  } catch(e){ remote = null; syncState = "local"; renderSettings(); }
+}
+
+const card = hz => progress.cards[hz];
+function markDay(){ const t = today(); if (!progress.days.includes(t)) progress.days.push(t); progress.daily[t] = (progress.daily[t] || 0) + 1; }
+function review(hz, g){
+  const t = today(), c = card(hz) ? {...card(hz)} : {b:0, due:t, r:0, w:0, t:0};
+  if (g === 0){ c.b = 0; c.due = t; c.w++; }
+  else { c.b = Math.min(7, c.b + (g === 2 ? 2 : 1)); c.due = t + INTERVALS[c.b]; c.r++; }
+  c.t = Date.now(); progress.cards[hz] = c; markDay(); save();
+}
+function quizResult(hz, ok){
+  const t = today(), c = card(hz) ? {...card(hz)} : {b:0, due:t, r:0, w:0, t:0};
+  if (ok) c.r++; else { c.w++; c.b = Math.max(0, c.b - 1); c.due = t; }
+  c.t = Date.now(); progress.cards[hz] = c; markDay(); save();
+}
+function status(hz){
+  const c = card(hz);
+  if (!c) return "new";
+  if (c.w > c.r || (c.b === 0 && c.w > 0)) return "weak";
+  return c.b >= 3 ? "known" : "learning";
+}
+function activeDeckIds(){
+  const upTo = LESSONS.findIndex(d => d.id === ui.upTo);
+  return LESSONS.slice(0, upTo + 1).map(d => d.id).concat(ui.extras);
+}
+function selectedItems(){
+  const ids = activeDeckIds(), seen = new Set(), out = [];
+  DECKS.forEach(d => { if (ids.includes(d.id)) BY_DECK[d.id].forEach(it => { if (!seen.has(it.hz)){ seen.add(it.hz); out.push(it); } }); });
+  return out;
+}
+function pickWeighted(pool, recent){
+  if (!pool.length) return null;
+  const avoid = new Set(recent.slice(-Math.min(3, pool.length - 1)));
+  const cand = pool.filter(x => !avoid.has(x.hz));
+  const ws = cand.map(x => { const c = card(x.hz); if (!c) return 2; let w = 1; if (c.w > c.r) w += 3; if (c.b <= 1) w += 1.5; if (c.b >= 4) w *= .5; return w; });
+  let r = Math.random() * ws.reduce((a,b) => a+b, 0), chosen = cand[cand.length-1];
+  for (let k = 0; k < cand.length; k++){ r -= ws[k]; if (r <= 0){ chosen = cand[k]; break; } }
+  recent.push(chosen.hz); if (recent.length > 12) recent.shift();
+  return chosen;
+}
+
+// ---------- Speech ----------
+const hasTTS = typeof window.speechSynthesis !== "undefined" && typeof window.SpeechSynthesisUtterance !== "undefined";
+let voice = null, zhVoices = [], voicesChecked = false, interacted = false, booted = false;
+function loadVoices(){
+  if (!hasTTS) return;
+  const vs = speechSynthesis.getVoices() || [];
+  const zh = vs.filter(v => /^(zh|cmn)/i.test(v.lang) && !/hk|yue|mo|tw/i.test(v.lang));
+  const rank = v => (/zh[-_]cn|cmn|hans/i.test(v.lang) ? 4 : 0) + (/natural|online|neural/i.test(v.name) ? 3 : 0) + (/google/i.test(v.name) ? 2 : 0) + (/xiaoxiao|yunxi|yaoyao|tingting|lili/i.test(v.name) ? 1 : 0) + (/desktop/i.test(v.name) ? -1 : 0);
+  zh.sort((a,b) => rank(b) - rank(a));
+  zhVoices = zh;
+  const before = voice;
+  voice = zh.find(v => v.name === ui.voice) || zh[0] || null;
+  if (vs.length) voicesChecked = true;
+  // Voices can arrive before the practice state below exists; the first full render picks them up.
+  if (before !== voice && booted){ renderSettings(); if (["listen","tones","hear"].includes(ui.mode)) renderStage(); }
+}
+if (hasTTS){
+  loadVoices();
+  if (speechSynthesis.addEventListener) speechSynthesis.addEventListener("voiceschanged", loadVoices);
+  setTimeout(() => { loadVoices(); voicesChecked = true; renderSettings(); if (["listen","tones","hear"].includes(ui.mode)) renderStage(); }, 2500);
+}
+function speak(text, slow){
+  if (!hasTTS || !text) return;
+  const u = new SpeechSynthesisUtterance(String(text).replace(/…/g, "，"));
+  u.lang = voice ? voice.lang : "zh-CN";
+  if (voice) u.voice = voice;
+  u.rate = (slow === undefined ? ui.slow : slow) ? 0.6 : 0.9;
+  try { speechSynthesis.cancel(); } catch(e){}
+  setTimeout(() => { try { speechSynthesis.speak(u); } catch(e){} }, 40);
+}
+const voiceProblem = () => !hasTTS || (voicesChecked && !voice);
+function voiceNotice(){
+  return voiceProblem() ? `<div class="notice"><p><strong>No sound on this device yet.</strong> The fix is at the top of the page.</p></div>` : "";
+}
+function renderBanner(){
+  const el = $("voiceBanner");
+  if (!voiceProblem()){ el.innerHTML = ""; return; }
+  const why = hasTTS ? "No Mandarin voice on this device, so audio is silent." : "This browser can't play speech.";
+  el.innerHTML = `<div class="notice banner" role="status"><details><summary>${why} How to fix it</summary>
+    <ul>
+      <li><strong>Quickest:</strong> open this page in Google Chrome or Microsoft Edge. Both come with Mandarin voices.</li>
+      <li><strong>Phone:</strong> iPhone: Settings → Accessibility → Spoken Content → Voices → Chinese. Android: Settings → Text-to-speech → install Chinese.</li>
+      <li><strong>Windows:</strong> Settings → Time &amp; language → Speech → Add voices → Chinese (Simplified, China), then restart the app.</li>
+    </ul>
+    <button class="ghost" data-act="test">Test sound</button></details></div>`;
+}
+
+// ---------- Shell: numbers, navigation, home, settings ----------
+function statsNow(){
+  const t = today(), items = selectedItems();
+  const words = [...DICT.values()].filter(it => !it.sent);
+  let known = 0, learning = 0, due = 0;
+  words.forEach(it => { const c = card(it.hz); if (!c) return; if (c.b >= 3) known++; else learning++; });
+  items.forEach(it => { const c = card(it.hz); if (c && c.due <= t) due++; });
+  const s = new Set(progress.days); let d = t, streak = 0;
+  if (!s.has(d)) d--;
+  while (s.has(d)){ streak++; d--; }
+  const todayN = progress.daily[t] || 0;
+  const newLeft = items.filter(i => !card(i.hz)).length;
+  const weak = items.filter(it => status(it.hz) === "weak").sort((a,b) => (card(b.hz).w - card(b.hz).r) - (card(a.hz).w - card(a.hz).r));
+  return {t, due, known, learning, streak, todayN, newLeft, weak, total:items.length};
+}
+const ICONS = {
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>',
+  study:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg>',
+  drills:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14l4-9 4 9M5.5 11h5M14 5h6M17 5v14M14 19h6"/></svg>',
+  words:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>',
+  speak:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a4.5 4.5 0 0 1 0 7M18.6 6a8 8 0 0 1 0 12"/></svg>',
+  settings:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>'
+};
+const VIEWS = [["home","Today"],["study","Study"],["drills","Drills"],["words","Words"],["speak","Speak"],["settings","Settings"]];
+const TITLES = {home:["Today","Your plan for this session"], study:["Study","Learn and review characters"], drills:["Drills","Pinyin, listening, tones and grammar"], words:["Words","Everything in your current lessons"], speak:["Speak","Hear any Chinese text read aloud"], settings:["Settings","Lessons, audio, goals and progress"]};
+function renderNav(){
+  const s = statsNow();
+  $("nav").innerHTML = `<div class="logo"><div class="seal" lang="zh-CN" aria-hidden="true">学</div><div><b>Road to HSK 4</b><small>v${APP_VERSION}</small></div></div>` +
+    VIEWS.map(([v,l]) => `<button class="navbtn" data-view="${v}" aria-current="${ui.view === v ? "page" : "false"}">${ICONS[v]}<span>${l}</span>${v === "study" && s.due ? `<span class="cnt">${s.due}</span>` : ""}</button>`).join("") + `<div class="spacer"></div>`;
+  const [title, sub] = TITLES[ui.view];
+  $("pageTitle").textContent = title; $("pageSub").textContent = sub;
+  const cur = DECK_BY_ID[ui.upTo];
+  $("barStats").innerHTML = `<span class="pill" title="Answers today / daily goal"><b>${s.todayN}</b>/${ui.goal} today</span>
+    <span class="pill${s.streak ? " hot" : ""}" title="Days in a row"><b>${s.streak}</b> day${s.streak === 1 ? "" : "s"}</span>
+    <button class="pill" data-view="settings" title="Change lessons">${esc(cur.name)}</button>`;
+}
+function renderStats(){ renderNav(); if (ui.view === "home") renderHome(); }
+function renderDecks(){}
+function renderSettings(){ renderBanner(); if (ui.view === "settings") renderSettingsView(); }
+function renderAll(){ applyTheme(); renderNav(); renderStage(); renderBanner(); }
+
+function ringSVG(frac){
+  const r = 24, c = 2 * Math.PI * r, f = Math.max(0, Math.min(1, frac));
+  return `<svg class="ring" viewBox="0 0 58 58" aria-hidden="true"><circle class="bg" cx="29" cy="29" r="${r}"/><circle class="fg" cx="29" cy="29" r="${r}" stroke-dasharray="${(c*f).toFixed(1)} ${c.toFixed(1)}"/></svg>`;
+}
+function chartSVG(){
+  const t = today(), days = []; for (let k = 13; k >= 0; k--) days.push(t - k);
+  const max = Math.max(ui.goal, ...days.map(d => progress.daily[d] || 0));
+  const W = 420, H = 88, pad = 14, bw = (W - 2*pad) / 14;
+  const gy = H - 18 - (ui.goal / max) * (H - 30);
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-label="Answers per day, last 14 days">
+    <line x1="${pad}" x2="${W-pad}" y1="${gy.toFixed(1)}" y2="${gy.toFixed(1)}" stroke-dasharray="3 3"/>
+    ${days.map((d, k) => { const n = progress.daily[d] || 0, h = n ? Math.max(2, (n / max) * (H - 30)) : 0; return `<rect class="${d === t ? "today" : ""}" x="${(pad + k*bw + 2).toFixed(1)}" y="${(H - 18 - h).toFixed(1)}" width="${(bw - 4).toFixed(1)}" height="${h.toFixed(1)}" rx="2"/>`; }).join("")}
+    <text x="${pad}" y="${H-4}">2 weeks ago</text><text x="${W-pad}" y="${H-4}" text-anchor="end">today</text></svg>`;
+}
+function renderHome(){
+  const s = statsNow(), cur = DECK_BY_ID[ui.upTo];
+  const extras = ui.extras.map(id => DECK_BY_ID[id].name);
+  let heroT, heroP, heroBtn;
+  if (s.due){ heroT = `${s.due} ${s.due === 1 ? "word is" : "words are"} due for review`; heroP = "Reviews come first: they keep what you learned yesterday from fading."; heroBtn = `<button class="primary" data-act="go-review">Start reviews</button>`; }
+  else if (s.newLeft){ heroT = `Nothing due. Learn ${Math.min(NEW_PER, s.newLeft)} new words?`; heroP = `${s.newLeft} words in ${esc(cur.name)} and below are still new to you.`; heroBtn = `<button class="primary" data-act="go-new">Learn new words</button>`; }
+  else { heroT = "You're caught up"; heroP = "Every word in your current lessons has been reviewed. Drill tones or move the lesson marker forward in Settings."; heroBtn = `<button class="primary" data-act="go-drill" data-m="tones">Drill tones</button>`; }
+  const MAX = 1200, marks = [[150,"HSK 1"],[300,"HSK 2"],[600,"HSK 3"],[1200,"HSK 4"]];
+  const next = marks.find(([n]) => n > s.known) || marks[3];
+  stage.innerHTML = `<div class="home">
+    <section class="hero"><div><h2>${heroT}</h2><p>${heroP}</p></div>${heroBtn}</section>
+    <div class="cards3">
+      <div class="tile goal">${ringSVG(s.todayN / ui.goal)}<div><span class="k">Daily goal</span><span class="v">${s.todayN}<small> / ${ui.goal}</small></span><span class="d">${s.todayN >= ui.goal ? "Done for today. Extra practice still counts." : (ui.goal - s.todayN) + " answers to go"}</span></div></div>
+      <div class="tile"><span class="k">Streak</span><span class="v">${s.streak}<small> ${s.streak === 1 ? "day" : "days"}</small></span><span class="d">${s.streak ? "Keep it going tomorrow." : "Answer one question to start."}</span></div>
+      <div class="tile"><span class="k">Words known</span><span class="v">${s.known}<small> / ${next[0]}</small></span><span class="d">${next[0] - s.known} more to ${next[1]}</span></div>
+    </div>
+    <div class="quick">
+      <button class="qbtn" data-act="go-study" data-m="write"><b>Write</b><small>characters from memory</small></button>
+      <button class="qbtn" data-act="go-drill" data-m="pinyin"><b>Pinyin</b><small>type with tones</small></button>
+      <button class="qbtn" data-act="go-drill" data-m="listen"><b>Listen</b><small>hear and choose</small></button>
+      <button class="qbtn" data-act="go-drill" data-m="tones"><b>Tones</b><small>train your ear</small></button>
+      <button class="qbtn" data-act="go-drill" data-m="grammar"><b>Grammar</b><small>fill the gap</small></button>
+      <button class="qbtn" data-act="go-view" data-v="words"><b>Words</b><small>${s.total} in scope</small></button>
+      <button class="qbtn" data-act="go-view" data-v="speak"><b>Speak</b><small>read aloud with me</small></button>
+      <button class="qbtn" data-act="go-view" data-v="settings"><b>Lessons</b><small>up to ${esc(cur.name)}${extras.length ? " + " + esc(extras.join(", ")) : ""}</small></button>
+    </div>
+    ${s.weak.length ? `<section class="section"><h3>Words you keep missing <button class="textbtn" data-act="go-weak">Review these</button></h3><div class="weaklist">${s.weak.slice(0, 5).map(it => `<div class="item">${playBtn(it.hz)}<span class="hz" lang="zh-CN">${esc(it.hz)}</span><span class="py">${pyHTML(it.py)}</span><span class="en">${esc(it.en)}</span></div>`).join("")}</div></section>` : ""}
+    <section class="section"><h3>Last two weeks <span class="muted" style="font-weight:400;font-size:.84rem">dashed line = goal</span></h3>${chartSVG()}</section>
+    <section class="path"><div class="path-head"><span><b>${s.known}</b> words known</span><span class="muted">${s.learning} learning</span></div>
+      <div class="track"><div class="fill" style="width:${Math.min(100, s.known/MAX*100)}%"></div>${marks.map(([n], k) => `<span class="tick${k===3?" last":""}" style="left:${n/MAX*100}%"></span>`).join("")}</div>
+      <div class="tlabels">${marks.map(([n,l], k) => `<span class="tl${k===3?" last":""}" style="left:${n/MAX*100}%"><b>${l}</b>${n}</span>`).join("")}</div>
+      <p class="fine">A word counts as known after you recall it in reviews spread over several days. Milestones are the classic HSK word totals.</p></section>
+  </div>`;
+}
+function renderSettingsView(){
+  const upToIdx = LESSONS.findIndex(d => d.id === ui.upTo);
+  const voiceRow = !hasTTS ? `<span class="d">Audio isn't supported in this browser.</span>`
+    : zhVoices.length ? `<select id="voiceSel">${zhVoices.map(x => `<option value="${esc(x.name)}" ${voice && x.name === voice.name ? "selected" : ""}>${esc(x.name.replace(/^Microsoft |^Google /, "").replace(/ - Chinese.*|（.*）|\(.*\)/, "").trim())}</option>`).join("")}</select>`
+    : `<span class="d">${voicesChecked ? "No Mandarin voice found" : "Looking for a Mandarin voice…"}</span>`;
+  const sync = syncState === "account" ? "Saved to your Claude account and shared across your devices." : "Saved on this device only.";
+  const upd = window.hsk ? `<div class="srow"><span><span class="k">Updates</span><span class="d" id="updStatus">${esc(updStatus)}</span></span><button class="ghost" data-act="checkupd">Check for updates</button></div>` : "";
+  stage.innerHTML = `<div class="set">
+    <section class="section"><h3>Lessons</h3>
+      <p class="d" style="margin:0;color:var(--ink-2);font-size:.9rem">Tap the last lesson your class has covered. Everything up to it is included in study and drills. Lessons marked "ahead" come from the textbook, not your teacher's slides.</p>
+      <div class="lessonlist">${LESSONS.map((d, k) => `<button class="lesson${k <= upToIdx ? " in" : ""}${d.id === ui.upTo ? " cur" : ""}" data-act="upto" data-id="${d.id}">${esc(d.name)} <em>${esc(d.note)}${d.group === "ahead" ? " · ahead" : ""}</em></button>`).join("")}</div>
+      <div class="srow"><span><span class="k">Also include</span><span class="d">Extra lists on top of your lessons</span></span></div>
+      <div class="lessonlist">${EXTRAS.map(d => `<label class="lesson${ui.extras.includes(d.id) ? " in" : ""}"><input type="checkbox" data-extra="${d.id}" ${ui.extras.includes(d.id) ? "checked" : ""} style="display:none">${esc(d.name)} <em>${esc(d.note)}</em></label>`).join("")}</div>
+    </section>
+    <section class="section"><h3>Audio</h3>
+      <div class="srow"><span><span class="k">Voice</span><span class="d">Mandarin voices on this device</span></span>${voiceRow}</div>
+      <div class="srow"><span><span class="k">Speed</span><span class="d">Slow helps with tones</span></span>${seg("speed", [["normal","Normal"],["slow","Slow"]], ui.slow ? "slow" : "normal")}</div>
+      <div class="srow"><span><span class="k">Test</span><span class="d">Plays 你好！我是加纳人。</span></span><button class="ghost" data-act="test">Test sound</button></div>
+    </section>
+    <section class="section"><h3>Study</h3>
+      <div class="srow"><span><span class="k">Daily goal</span><span class="d">Answers per day. 40 takes about 20 minutes.</span></span><input type="number" id="goalIn" min="10" max="300" step="5" value="${ui.goal}"></div>
+      <div class="srow"><span><span class="k">Pinyin on card fronts</span><span class="d">Easier at first; turn off once you can read the characters</span></span><input type="checkbox" id="pyFront" ${ui.pinyinFront ? "checked" : ""}></div>
+      <div class="srow"><span><span class="k">Theme</span></span><select id="themeSel"><option value="system" ${ui.theme === "system" ? "selected" : ""}>Match system</option><option value="light" ${ui.theme === "light" ? "selected" : ""}>Light</option><option value="dark" ${ui.theme === "dark" ? "selected" : ""}>Dark</option></select></div>
+    </section>
+    <section class="section"><h3>Progress</h3>
+      <div class="srow"><span><span class="k">Where it's saved</span><span class="d">${sync}</span></span></div>
+      <div class="srow"><span><span class="k">Weak words</span><span class="d">Copy the words you keep missing, to paste to Claude</span></span><button class="ghost" data-act="copyweak">Copy weak words</button>${Date.now() - copiedAt < 4000 ? '<span class="copied">Copied</span>' : ""}</div>
+      <div class="srow"><span><span class="k">Start over</span><span class="d">Erases every review and score on this device</span></span>${resetArmed ? `<button class="primary" style="background:var(--bad);border-color:var(--bad)" data-act="reset2">Yes, erase everything</button><button class="ghost" data-act="reset0">Keep it</button>` : `<button class="ghost" data-act="reset1">Reset progress…</button>`}</div>
+      <textarea id="copyBox" class="say" hidden readonly aria-label="Weak words to copy"></textarea>
+    </section>
+    <section class="section"><h3>Keyboard</h3>
+      <div class="keys"><kbd>Space</kbd><span>Show the answer (Cards, Write)</span><kbd>1 2 3</kbd><span>Again, Good, Easy</span><kbd>1–4</kbd><span>Pick an option (Listen, Tones, Grammar)</span><kbd>Enter</kbd><span>Check your typing, then Next</span></div>
+    </section>
+    <section class="section"><h3>About</h3>
+      <div class="srow"><span><span class="k">Road to HSK 4 v${APP_VERSION}</span><span class="d">Integrated Chinese Lessons 1–5, HSK 1–2 word lists, 46 listening sentences, 32 grammar points.</span></span></div>
+      ${upd}
+    </section>
+  </div>`;
+}
+let resetArmed = false, updStatus = "Checks automatically when the app starts.";
+
+$("nav").addEventListener("click", e => { const b = e.target.closest("[data-view]"); if (b) goView(b.dataset.view); });
+$("barStats").addEventListener("click", e => { const b = e.target.closest("[data-view]"); if (b) goView(b.dataset.view); });
+$("voiceBanner").addEventListener("click", e => { if (e.target.closest('[data-act="test"]')) speak("你好！我是加纳人。"); });
+function goView(v){
+  ui.view = v; resetArmed = false;
+  if (v === "study") ui.mode = ui.studyMode;
+  else if (v === "drills") ui.mode = ui.drillMode;
+  else if (v === "words") ui.mode = "words";
+  else if (v === "speak") ui.mode = "hear";
+  saveUI(); renderNav(); renderStage(); focusInput();
+  try { window.scrollTo({top:0, behavior:"instant"}); } catch(e){}
+}
+
+// ---------- Practice state ----------
+let cq = null;
+const pin = {cur:null, ans:null, input:"", right:0, total:0, recent:[]};
+const lis = {cur:null, opts:[], ans:null, input:"", right:0, total:0, recent:[], auto:null};
+const ton = {cur:null, ans:null, right:0, total:0, recent:[], auto:null};
+const wr = {cur:null, revealed:false, recent:[], ctx:null, cv:null, strokes:0};
+const gr = {cur:null, opts:[], ans:null, right:0, total:0, recent:[]};
+let copiedAt = 0;
+// The key press that answers can land on the Next button that replaces Check; ignore it.
+let answeredAt = 0;
+const tooSoon = () => Date.now() - answeredAt < 350;
+function resetModes(){ cq = null; pin.cur = null; lis.cur = null; ton.cur = null; wr.cur = null; }
+
+const stage = $("stage");
+const subtabs = (act, opts, cur) => `<div class="stagebar" style="margin-bottom:4px">${seg(act, opts, cur)}</div>`;
+function renderStage(){
+  const v = ui.view;
+  if (v === "home") return renderHome();
+  if (v === "settings") return renderSettingsView();
+  if (v === "words") return renderWords();
+  if (v === "speak") return renderHear();
+  if (v === "study"){
+    ui.mode = ui.studyMode;
+    (ui.mode === "write" ? renderWrite : renderCards)();
+    stage.insertAdjacentHTML("afterbegin", subtabs("study", [["cards","Cards"],["write","Write"]], ui.studyMode));
+    return;
+  }
+  ui.mode = ui.drillMode;
+  ({pinyin:renderPinyin, listen:renderListen, tones:renderTones, grammar:renderGrammar}[ui.mode] || renderPinyin)();
+  stage.insertAdjacentHTML("afterbegin", subtabs("drill", [["pinyin","Pinyin"],["listen","Listen"],["tones","Tones"],["grammar","Grammar"]], ui.drillMode));
+}
+
+// An example sentence from the Sentences deck that uses this word
+function exampleFor(it){
+  if (it.sent) return "";
+  const hits = BY_DECK.sent.filter(s => s.hz.includes(it.hz)).sort((a,b) => a.hz.length - b.hz.length);
+  if (!hits.length) return "";
+  const s = hits[rand(Math.min(2, hits.length))];
+  return `<div class="ex"><span class="lab">In a sentence</span><div class="row"><span class="hz" lang="zh-CN">${esc(s.hz)}</span>${playBtn(s.hz)}</div><span class="py">${pyHTML(s.py)}</span><span class="en">${esc(s.en)}</span></div>`;
+}
+
+// Write: draw the characters from memory, then compare
+function nextWrite(){
+  wr.cur = pickWeighted(selectedItems().filter(i => !i.sent && Array.from(i.hz).length <= 4 && !/…/.test(i.hz)), wr.recent);
+  wr.revealed = false; wr.strokes = 0;
+}
+function setupCanvas(){
+  const cv = $("wrCanvas"); if (!cv) return;
+  const dpr = window.devicePixelRatio || 1, r = cv.getBoundingClientRect();
+  cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr);
+  const ctx = cv.getContext("2d");
+  ctx.scale(dpr, dpr); ctx.lineWidth = 7; ctx.lineCap = "round"; ctx.lineJoin = "round";
+  ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--ink").trim() || "#000";
+  let down = false;
+  const pos = e => { const b = cv.getBoundingClientRect(); return [e.clientX - b.left, e.clientY - b.top]; };
+  cv.addEventListener("pointerdown", e => { down = true; interacted = true; try { cv.setPointerCapture(e.pointerId); } catch(err){} const [x,y] = pos(e); ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + .1, y); ctx.stroke(); wr.strokes++; e.preventDefault(); });
+  cv.addEventListener("pointermove", e => { if (!down) return; const [x,y] = pos(e); ctx.lineTo(x, y); ctx.stroke(); });
+  const up = () => { down = false; };
+  cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up); cv.addEventListener("pointerleave", up);
+  wr.ctx = ctx; wr.cv = cv;
+}
+function writeControls(){
+  const it = wr.cur, b = card(it.hz) ? card(it.hz).b : 0;
+  if (!wr.revealed) return `<div class="btnrow"><button class="ghost" data-act="wclear">Clear</button><button class="primary" data-act="wreveal">Show character <kbd>Space</kbd></button></div>`;
+  return `<div class="answer"><div class="row"><p class="py big">${pyHTML(it.py)}</p>${playBtn(it.hz)}</div><p class="hint">Compare your strokes with the grey character. Grade yourself honestly.</p></div>
+    <div class="grades"><button class="g again" data-act="wgrade" data-g="0">Again<small>today</small></button>
+    <button class="g good" data-act="wgrade" data-g="1">Good<small>${days(INTERVALS[Math.min(7, b+1)])}</small></button>
+    <button class="g easy" data-act="wgrade" data-g="2">Easy<small>${days(INTERVALS[Math.min(7, b+2)])}</small></button></div>`;
+}
+function renderWrite(){
+  if (!wr.cur) nextWrite();
+  const it = wr.cur;
+  if (!it){ stage.innerHTML = `<div class="panel"><p class="en big">Pick a word deck above.</p></div>`; return; }
+  const chars = Array.from(it.hz);
+  stage.innerHTML = `<div class="stagebar"><span class="hint">Write it from memory with your mouse or finger</span><span class="score">${esc(DECK_BY_ID[it.deck].name)}</span></div>
+    <div class="panel"><div class="face"><p class="py big">${pyHTML(it.py)}</p><p class="en">${esc(it.en)}</p></div>
+    <div class="wrwrap${wr.revealed ? " revealed" : ""}" id="wrWrap"><div class="grid g${chars.length}" lang="zh-CN">${chars.map(c => `<span class="cell"><i>${esc(c)}</i></span>`).join("")}</div><canvas class="wrc" id="wrCanvas" aria-label="Drawing area"></canvas></div>
+    <div id="wrControls" class="wide">${writeControls()}</div></div>`;
+  setupCanvas();
+}
+
+// Grammar: choose the word that fits
+function nextGrammar(){
+  const pool = GRAMMAR.map((g, i) => ({hz:"g" + i, g}));
+  const pick = pickWeighted(pool, gr.recent);
+  gr.cur = pick.g; gr.key = pick.hz; gr.ans = null;
+  gr.opts = shuffle(gr.cur.opts.map((o, i) => ({o, i})));
+}
+function renderGrammar(){
+  if (!gr.cur) nextGrammar();
+  const g = gr.cur, right = g.opts[g.a];
+  const full = g.q.includes("___") ? g.q.replace("___", right.split("：").pop()) : right;
+  const q = g.q.includes("___") ? esc(g.q).replace("___", "<u>&nbsp;&nbsp;&nbsp;</u>") : esc(g.q);
+  stage.innerHTML = `<div class="stagebar"><span class="hint">Pick the word that fits. Keys 1–3.</span><span class="score">${gr.right} of ${gr.total} right</span></div>
+    <div class="panel"><div class="face"><p class="gq" lang="zh-CN">${gr.ans ? esc(full) : q}</p><p class="en">${esc(g.en)}</p></div>
+    <div class="opts">${gr.opts.map((o, k) => {
+      const cls = gr.ans ? (o.i === g.a ? " right" : (gr.ans.k === k ? " wrong" : "")) : "";
+      return `<button class="opt${cls}" data-act="gopt" data-i="${k}" ${gr.ans ? "disabled" : ""}><span class="n">${k+1}</span><span lang="zh-CN" style="font-family:var(--hz);font-size:1.25rem">${esc(o.o)}</span></button>`;
+    }).join("")}</div>
+    ${gr.ans ? `<div class="fb ${gr.ans.ok ? "right" : "wrong"}"><strong>${gr.ans.ok ? "Correct" : "Not quite"}</strong><p>${esc(g.why)}</p><p>${playBtn(full)} <span class="note">Hear the full sentence</span></p></div>
+      <button class="primary wide" data-act="next" id="nextBtn">Next <kbd>Enter</kbd></button>` : ""}</div>`;
+}
+
+// Cards: spaced review in three directions
+function buildQueue(kind){
+  const t = today(), items = selectedItems();
+  let list;
+  if (kind === "cram"){ const seen = items.filter(i => card(i.hz)); list = shuffle(seen.length >= 5 ? seen : items).slice(0, 20); }
+  else if (kind === "weak"){ const w = items.filter(i => status(i.hz) === "weak"); list = shuffle(w.length ? w : items.filter(i => card(i.hz))).slice(0, 20); kind = "cram"; }
+  else if (kind === "more"){ list = items.filter(i => !card(i.hz)).slice(0, NEW_PER); }
+  else {
+    const due = items.filter(i => { const c = card(i.hz); return c && c.due <= t; }).sort((a,b) => card(a.hz).due - card(b.hz).due);
+    list = due.concat(items.filter(i => !card(i.hz)).slice(0, NEW_PER));
+  }
+  cq = {list, i:0, shown:false, done:0, again:0, cram:kind === "cram", auto:null};
+}
+function renderCards(){
+  if (!cq) buildQueue();
+  const dirs = seg("dir", [["read","Read 字"],["recall","English → 字"],["hear","Listen → 字"]], ui.cardDir);
+  const it = cq.list[cq.i];
+  if (!it){
+    const left = selectedItems().filter(i => !card(i.hz)).length;
+    const msg = cq.list.length ? `Session done: ${cq.done} answers, ${cq.again} sent back for another look.` : "Nothing is due in these decks right now.";
+    stage.innerHTML = `<div class="stagebar">${dirs}</div><div class="panel"><p class="en big">${esc(msg)}</p>
+      <p class="hint">${left} new ${left === 1 ? "word" : "words"} left in the decks you picked.</p>
+      <div class="btnrow">${left ? `<button class="primary" data-act="more">Learn ${Math.min(NEW_PER, left)} new words</button>` : ""}<button class="ghost" data-act="cram">Review 20 at random</button></div></div>`;
+    return;
+  }
+  const c = card(it.hz), isNew = !c, b = c ? c.b : 0;
+  let front;
+  if (ui.cardDir === "read") front = hzBlock(it.hz, cq.shown) + (ui.pinyinFront && !cq.shown ? `<p class="py big">${pyHTML(it.py)}</p>` : "");
+  else if (ui.cardDir === "recall") front = `<p class="en big">${esc(it.en)}</p>${it.pos ? `<p class="pos">${esc(POS[it.pos] || it.pos)}</p>` : ""}${cq.shown ? "" : `<p class="hint">Say it out loud in Chinese, then check.</p>`}`;
+  else front = `${playBtn(it.hz, "huge", "Play the word again")}${cq.shown ? "" : `<p class="hint">Listen, then picture the characters and the meaning.</p>`}`;
+  const back = cq.shown ? `<div class="answer">${ui.cardDir !== "read" ? hzBlock(it.hz, true) : ""}
+      <div class="row"><p class="py big">${pyHTML(it.py)}</p>${playBtn(it.hz)}</div>${ui.cardDir !== "recall" ? `<p class="en">${esc(it.en)}</p>` : ""}</div>${exampleFor(it)}` : "";
+  const controls = cq.shown
+    ? `<div class="grades"><button class="g again" data-act="grade" data-g="0">Again<small>${cq.cram ? "missed it" : "today"}</small></button>
+       <button class="g good" data-act="grade" data-g="1" id="goodBtn">Good<small>${cq.cram ? "knew it" : days(INTERVALS[Math.min(7, b+1)])}</small></button>
+       <button class="g easy" data-act="grade" data-g="2">Easy<small>${cq.cram ? "too easy" : days(INTERVALS[Math.min(7, b+2)])}</small></button></div>`
+    : `<button class="primary wide" data-act="flip" id="flipBtn">Show answer <kbd>Space</kbd></button>`;
+  stage.innerHTML = `<div class="stagebar">${dirs}<span class="score">${cq.i + 1} of ${cq.list.length}</span></div>
+    <div class="panel"><div class="meta"><span>${esc(DECK_BY_ID[it.deck].name)}</span>${isNew ? '<span class="tag">New</span>' : ""}</div>
+    <div class="face">${front}</div>${back}${controls}</div>`;
+  if (ui.cardDir === "hear" && !cq.shown && interacted && cq.auto !== cq.i){ cq.auto = cq.i; speak(it.hz); }
+}
+
+// Typing pinyin (also used by listening dictation)
+function typeArea(st, placeholder){
+  const it = st.cur;
+  return `<div class="pyin"><input id="pyIn" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" lang="en"
+      placeholder="${esc(placeholder)}" value="${esc(st.input)}" ${st.ans ? "disabled" : ""} aria-label="Type the pinyin">
+    ${st.ans ? "" : `<button class="primary" data-act="check">Check</button>`}</div>
+    ${st.ans ? feedback(st) + `<button class="primary wide" data-act="next" id="nextBtn">Next <kbd>Enter</kbd></button>`
+             : `<p class="tip">Type tone numbers after each syllable: ma1 ma2 ma3 ma4. Leave light syllables without a number. Type v for ü (lv4shi1).</p>`}`;
+}
+function feedback(st){
+  const g = st.ans, it = st.cur;
+  const showWord = ui.mode === "listen" ? `<div class="row">${hzBlock(it.hz, true)}</div><p class="en">${esc(it.en)}</p>` : "";
+  const ans = `<p><span class="lab">Answer</span><span class="py">${pyHTML(it.py)}</span> ${playBtn(it.hz)}</p>`;
+  const third = hasThirdPair(pySylls(it.py)) ? `<p class="note">Two third tones in a row: the first is spoken like a 2nd tone but still written as a 3rd.</p>` : "";
+  if (g.kind === "right") return `<div class="fb right"><strong>Correct</strong>${ans}${g.lenient ? `<p class="note">One syllable here is light (neutral tone), so it is written with no tone mark.</p>` : ""}${third}${showWord}</div>`;
+  if (g.kind === "tones") return `<div class="fb tones"><strong>Right sounds, check the tones</strong><p><span class="lab">You typed</span><span class="py">${syllsHTML(g.user)}</span></p>${ans}${third}${showWord}</div>`;
+  return `<div class="fb wrong"><strong>Not quite</strong>${ans}${g.hint === "ü" ? `<p class="note">This word uses ü. Type it as v.</p>` : ""}${showWord}</div>`;
+}
+function submitType(st){
+  const g = grade(st.input, st.cur.py, st.cur.hz);
+  if (g.kind === "empty") return;
+  st.ans = g; st.total++; if (g.kind === "right") st.right++;
+  answeredAt = Date.now();
+  quizResult(st.cur.hz, g.kind === "right");
+  renderStage(); renderStats();
+  speak(st.cur.hz);
+  const n = $("nextBtn"); if (n) n.focus();
+}
+function focusInput(){ const i = $("pyIn"); if (i && !i.disabled) i.focus({preventScroll:true}); }
+
+function nextPin(){ pin.cur = pickWeighted(selectedItems().filter(i => !i.sent), pin.recent); pin.ans = null; pin.input = ""; }
+function renderPinyin(){
+  if (!pin.cur) nextPin();
+  if (!pin.cur){ stage.innerHTML = `<div class="panel"><p class="en big">Pick a word deck above.</p><p class="hint">Sentences are too long for typing practice. Try them in Listen.</p></div>`; return; }
+  const it = pin.cur;
+  stage.innerHTML = `<div class="stagebar"><span class="hint">Write the pinyin with tones</span><span class="score">${pin.right} of ${pin.total} right</span></div>
+    <div class="panel"><div class="face">${hzBlock(it.hz, !!pin.ans)}<p class="en">${esc(it.en)}</p></div>${typeArea(pin, "e.g. ni3 hao3")}</div>`;
+}
+
+// Listening
+function makeOpts(it, pool){
+  const key = x => x.py.toLowerCase().replace(/[^a-zü\u00e0-\u01dc]/g, "");
+  const ok = x => x.hz !== it.hz && x.sent === it.sent && x.en !== it.en && key(x) !== key(it);
+  let c = shuffle(pool.filter(ok));
+  if (c.length < 3) c = c.concat(shuffle([...DICT.values()].filter(x => ok(x) && !c.includes(x))));
+  return shuffle([it].concat(c.slice(0, 3)));
+}
+function nextListen(){
+  const pool = selectedItems();
+  lis.cur = pickWeighted(pool, lis.recent); lis.ans = null; lis.input = ""; lis.auto = null;
+  if (lis.cur) lis.opts = makeOpts(lis.cur, pool);
+}
+function renderListen(){
+  if (!lis.cur) nextListen();
+  const it = lis.cur;
+  const bar = `<div class="stagebar">${seg("lsub", [["pick","Pick the meaning"],["write","Write what you hear"]], ui.listenSub)}<span class="score">${lis.right} of ${lis.total} right</span></div>`;
+  const audio = `<div class="row">${playBtn(it.hz, "huge", "Play again")}</div><div class="btnrow"><button class="textbtn" data-act="sayslow" data-text="${esc(it.hz)}">Play slowly</button></div>`;
+  let body;
+  if (ui.listenSub === "pick"){
+    body = `<p class="hint">What does it mean? Keys 1–4.</p><div class="opts">${lis.opts.map((o, k) => {
+      const cls = lis.ans ? (o === it ? " right" : (lis.ans.idx === k ? " wrong" : "")) : "";
+      return `<button class="opt${cls}" data-act="opt" data-i="${k}" ${lis.ans ? "disabled" : ""}><span class="n">${k+1}</span><span>${esc(o.en)}</span></button>`;
+    }).join("")}</div>` + (lis.ans ? `<div class="answer">${hzBlock(it.hz, true)}<div class="row"><p class="py big">${pyHTML(it.py)}</p></div><p class="en">${esc(it.en)}</p></div>
+      <button class="primary wide" data-act="next" id="nextBtn">Next <kbd>Enter</kbd></button>` : "");
+  } else body = typeArea(lis, "Type the pinyin you hear");
+  stage.innerHTML = `${bar}<div class="panel">${voiceNotice()}${audio}${body}</div>`;
+  if (interacted && !lis.ans && lis.auto !== it.hz){ lis.auto = it.hz; speak(it.hz); }
+}
+
+// Tones
+function contour(t){
+  return `<svg class="contour t${t}" viewBox="0 0 30 38" aria-hidden="true"><path class="lv" d="M0 5H30M0 33H30"/><polyline points="${CONTOUR[t]}" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+}
+function toneVariants(T){
+  const idx = T.map((s, k) => s.tone ? k : -1).filter(k => k >= 0);
+  if (!idx.length) return [];
+  if (T.length === 1){ const out = []; for (let t = 1; t <= 4; t++) if (t !== T[0].tone) out.push([{base:T[0].base, tone:t}]); return out; }
+  const key = a => a.map(s => s.tone).join(""), seen = new Set([key(T)]), out = [];
+  let guard = 0;
+  while (out.length < 3 && guard++ < 80){
+    const v = T.map(s => ({...s})), k = idx[rand(idx.length)];
+    let nt; do { nt = 1 + rand(4); } while (nt === T[k].tone);
+    v[k].tone = nt;
+    if (idx.length > 1 && Math.random() < .35){ const k2 = idx[rand(idx.length)]; if (k2 !== k){ let n2; do { n2 = 1 + rand(4); } while (n2 === T[k2].tone); v[k2].tone = n2; } }
+    if (!seen.has(key(v))){ seen.add(key(v)); out.push(v); }
+  }
+  return out;
+}
+function nextTone(){
+  ton.ans = null; ton.auto = null;
+  if (ui.toneSub === "syll"){
+    const set = TONE_SETS[rand(TONE_SETS.length)], k = rand(4);
+    ton.cur = {set, k, hz:set[1+k][0]};
+  } else {
+    const pool = selectedItems().filter(i => !i.sent && /^[^…]+$/.test(i.hz)).filter(i => { const T = pySylls(i.py); return T.length <= 4 && T.some(s => s.tone); });
+    const it = pickWeighted(pool, ton.recent);
+    if (!it){ ton.cur = null; return; }
+    const T = pySylls(it.py);
+    ton.cur = {it, T, hz:it.hz, opts:shuffle([T].concat(toneVariants(T).slice(0, 3)))};
+  }
+}
+function renderTones(){
+  if (!ton.cur) nextTone();
+  const bar = `<div class="stagebar">${seg("tsub", [["syll","Single sounds"],["word","Words from your decks"]], ui.toneSub)}<span class="score">${ton.right} of ${ton.total} right</span></div>`;
+  if (!ton.cur){ stage.innerHTML = `${bar}<div class="panel"><p class="en big">Pick a word deck above.</p></div>`; return; }
+  const cur = ton.cur;
+  let body;
+  if (ui.toneSub === "syll"){
+    const set = cur.set;
+    body = `<p class="hint">Which tone do you hear? Keys 1–4.</p><div class="tones4">${[1,2,3,4].map(t => {
+      const cls = ton.ans ? (t-1 === cur.k ? " right" : (ton.ans.i === t-1 ? " wrong" : "")) : "";
+      return `<button class="tonebtn${cls}" data-act="tone" data-i="${t-1}" ${ton.ans ? "disabled" : ""}>${contour(t)}<span class="py t${t}">${esc(set[t][1])}</span><small>Tone ${t} · ${CHAO[t]}</small></button>`;
+    }).join("")}</div>`;
+    if (ton.ans){
+      const w = set[1+cur.k];
+      body += `<div class="answer"><div class="row">${hzBlock(w[0], true)}</div><div class="row"><p class="py big">${pyHTML(w[1])}</p><p class="en">${esc(w[2])}</p></div>
+        <p class="hint">Compare: ${[1,2,3,4].map(t => `<button class="textbtn" data-act="say" data-text="${esc(set[t][0])}">${esc(set[t][1])}</button>`).join(" ")}</p></div>
+        <button class="primary wide" data-act="next" id="nextBtn">Next <kbd>Enter</kbd></button>`;
+    }
+    const acc = [1,2,3,4].map(t => { const [r,w] = progress.tones[t]; const n = r + w; const pct = n ? Math.round(r/n*100) : 0;
+      return `<span>Tone ${t}</span><span class="bar"><i class="t${t}" style="width:${pct}%;background:currentColor"></i></span><span>${n ? pct + "% of " + n : "–"}</span>`; }).join("");
+    body += `<div class="acc" aria-label="Your accuracy by tone">${acc}</div>`;
+  } else {
+    body = `<p class="hint">Which spelling matches what you hear? Keys 1–4.</p><div class="opts">${cur.opts.map((o, k) => {
+      const right = o === cur.T, cls = ton.ans ? (right ? " right" : (ton.ans.i === k ? " wrong" : "")) : "";
+      return `<button class="opt${cls}" data-act="tone" data-i="${k}" ${ton.ans ? "disabled" : ""}><span class="n">${k+1}</span><span class="py ${ton.ans ? "" : "nocolor"}">${syllsHTML(o)}</span></button>`;
+    }).join("")}</div>`;
+    if (ton.ans){
+      body += `<div class="answer">${hzBlock(cur.it.hz, true)}<p class="en">${esc(cur.it.en)}</p>${hasThirdPair(cur.T) ? `<p class="note">Two third tones in a row: the first is spoken like a 2nd tone but still written as a 3rd.</p>` : ""}</div>
+        <button class="primary wide" data-act="next" id="nextBtn">Next <kbd>Enter</kbd></button>`;
+    }
+  }
+  stage.innerHTML = `${bar}<div class="panel">${voiceNotice()}<div class="row">${playBtn(cur.hz, "huge", "Play again")}</div>
+    <div class="btnrow"><button class="textbtn" data-act="sayslow" data-text="${esc(cur.hz)}">Play slowly</button></div>${body}</div>`;
+  if (interacted && !ton.ans && ton.auto !== cur.hz){ ton.auto = cur.hz; speak(cur.hz); }
+}
+
+// Word list
+function renderWords(){
+  const items = selectedItems();
+  const counts = {all:items.length, new:0, learning:0, known:0, weak:0};
+  items.forEach(it => counts[status(it.hz)]++);
+  const shown = ui.listFilter === "all" ? items : items.filter(it => status(it.hz) === ui.listFilter);
+  const filters = [["all","All"],["new","New"],["learning","Learning"],["known","Known"],["weak","Weak"]];
+  stage.innerHTML = `<div class="stagebar">${seg("filter", filters.map(([v,l]) => [v, l + " " + counts[v]]), ui.listFilter)}
+      <span class="row"><button class="ghost" data-act="copyweak">Copy weak words</button>${Date.now() - copiedAt < 4000 ? '<span class="copied">Copied</span>' : ""}</span></div>
+    <div class="panel"><div class="legend"><span><i class="dot new"></i>New</span><span><i class="dot learning"></i>Learning</span><span><i class="dot known"></i>Known</span><span><i class="dot weak"></i>Weak (missed more than got right)</span></div>
+    ${shown.length ? `<div class="tablewrap"><table><thead><tr><th><span class="sr">Status</span></th><th>字</th><th>Pinyin</th><th>Meaning</th><th></th></tr></thead><tbody>
+    ${shown.map(it => `<tr><td><i class="dot ${status(it.hz)}" title="${status(it.hz)}"></i></td><td class="hz${Array.from(it.hz).length <= 5 ? " short" : ""}" lang="zh-CN">${esc(it.hz)}</td>
+      <td class="py">${pyHTML(it.py)}</td><td class="en">${esc(it.en)}</td><td>${playBtn(it.hz)}</td></tr>`).join("")}
+    </tbody></table></div>` : `<p class="hint">No words in this group yet.</p>`}
+    <textarea id="copyBox" class="say" hidden readonly aria-label="Weak words to copy"></textarea></div>`;
+}
+
+// Pronounce anything
+function segmentWords(text){
+  const ch = Array.from(text), out = [];
+  let i = 0;
+  while (i < ch.length){
+    let found = null;
+    for (let L = Math.min(6, ch.length - i); L >= 1; L--){
+      const it = DICT.get(ch.slice(i, i+L).join(""));
+      if (it && !it.sent){ found = it; i += L; break; }
+    }
+    if (found){ if (!out.includes(found)) out.push(found); } else i++;
+  }
+  return out;
+}
+function foundHTML(){
+  const found = segmentWords(ui.sayText || "");
+  if (!found.length) return `<p class="hint">Words from your decks will show here with pinyin as you type.</p>`;
+  return `<p class="label">Words from your decks in this text</p>` + found.map(it => `<div class="item">${playBtn(it.hz)}<span class="hz" lang="zh-CN">${esc(it.hz)}</span><span class="py">${pyHTML(it.py)}</span><span class="en">${esc(it.en)}</span></div>`).join("");
+}
+function renderHear(){
+  stage.innerHTML = `<div class="stagebar"><span class="hint">Type or paste Chinese characters and listen</span></div>
+    <div class="panel">${voiceNotice()}
+    <textarea id="sayIn" class="say" lang="zh-CN" placeholder="例如：我家有七口人。" aria-label="Chinese text to pronounce">${esc(ui.sayText || "")}</textarea>
+    <div class="btnrow"><button class="primary" data-act="sayit">Play</button><button class="ghost" data-act="sayitslow">Play slowly</button><button class="ghost" data-act="stop">Stop</button></div>
+    <div class="presets">${PRESETS.map((p, k) => `<button class="chip" data-act="preset" data-i="${k}">${esc(p[0])}</button>`).join("")}</div>
+    <div class="found" id="found">${foundHTML()}</div></div>`;
+}
+
+// ---------- Actions ----------
+const A = {
+  say: el => speak(el.dataset.text),
+  sayslow: el => speak(el.dataset.text, true),
+  study: el => { ui.studyMode = el.dataset.v; saveUI(); goView("study"); },
+  drill: el => { ui.drillMode = el.dataset.v; saveUI(); goView("drills"); },
+  "go-view": el => goView(el.dataset.v),
+  "go-study": el => { ui.studyMode = el.dataset.m; saveUI(); goView("study"); },
+  "go-drill": el => { ui.drillMode = el.dataset.m; saveUI(); goView("drills"); },
+  "go-review": () => { ui.studyMode = "cards"; buildQueue(); goView("study"); },
+  "go-new": () => { ui.studyMode = "cards"; buildQueue("more"); goView("study"); },
+  "go-weak": () => { ui.studyMode = "cards"; buildQueue("weak"); goView("study"); },
+  upto: el => { ui.upTo = el.dataset.id; saveUI(); resetModes(); renderNav(); renderStage(); },
+  speed: el => { ui.slow = el.dataset.v === "slow"; saveUI(); renderStage(); },
+  test: () => speak("你好！我是加纳人。"),
+  reset1: () => { resetArmed = true; renderStage(); },
+  reset0: () => { resetArmed = false; renderStage(); },
+  reset2: () => { progress = blankProgress(); resetArmed = false; resetModes(); save(); renderNav(); renderStage(); },
+  checkupd: () => { if (window.hsk){ updStatus = "Checking…"; renderStage(); window.hsk.checkForUpdates(); } },
+  dir: el => { ui.cardDir = el.dataset.v; saveUI(); if (cq){ cq.shown = false; cq.auto = null; } renderStage(); },
+  flip: () => { if (!cq || cq.shown) return; cq.shown = true; answeredAt = Date.now(); renderStage(); speak(cq.list[cq.i].hz); const g = $("goodBtn"); if (g) g.focus({preventScroll:true}); },
+  grade: el => {
+    if (!cq || !cq.shown || tooSoon()) return;
+    const g = +el.dataset.g, it = cq.list[cq.i];
+    if (cq.cram) quizResult(it.hz, g > 0); else review(it.hz, g);
+    if (g === 0){ cq.list.splice(Math.min(cq.list.length, cq.i + 4), 0, it); cq.again++; }
+    cq.done++; cq.i++; cq.shown = false;
+    renderStage(); renderStats(); renderDecks();
+    const f = $("flipBtn"); if (f) f.focus({preventScroll:true});
+  },
+  more: () => { buildQueue("more"); renderStage(); },
+  cram: () => { buildQueue("cram"); renderStage(); },
+  check: () => { const st = ui.mode === "listen" ? lis : pin; const i = $("pyIn"); if (i) st.input = i.value; submitType(st); },
+  wclear: () => { if (wr.ctx && wr.cv){ const d = window.devicePixelRatio || 1; wr.ctx.clearRect(0, 0, wr.cv.width / d, wr.cv.height / d); wr.strokes = 0; } },
+  wreveal: () => { if (!wr.cur || wr.revealed) return; wr.revealed = true; answeredAt = Date.now(); $("wrWrap").classList.add("revealed"); $("wrControls").innerHTML = writeControls(); speak(wr.cur.hz); },
+  wgrade: el => {
+    if (!wr.cur || !wr.revealed || tooSoon()) return;
+    review(wr.cur.hz, +el.dataset.g); nextWrite(); renderStage(); renderStats(); renderDecks();
+  },
+  gopt: el => {
+    if (gr.ans) return;
+    const k = +el.dataset.i, ok = gr.opts[k].i === gr.cur.a;
+    gr.ans = {k, ok}; gr.total++; if (ok) gr.right++; answeredAt = Date.now();
+    quizResult(gr.key, ok); renderStage();
+    const n = $("nextBtn"); if (n) n.focus({preventScroll:true});
+  },
+  next: () => {
+    if (tooSoon()) return;
+    if (ui.mode === "pinyin") nextPin();
+    else if (ui.mode === "listen") nextListen();
+    else if (ui.mode === "tones") nextTone();
+    else if (ui.mode === "grammar") nextGrammar();
+    renderStage(); renderDecks(); focusInput();
+  },
+  lsub: el => { ui.listenSub = el.dataset.v; saveUI(); nextListen(); renderStage(); focusInput(); },
+  tsub: el => { ui.toneSub = el.dataset.v; saveUI(); nextTone(); renderStage(); },
+  opt: el => {
+    if (lis.ans) return;
+    const k = +el.dataset.i, ok = lis.opts[k] === lis.cur;
+    lis.ans = {idx:k, ok}; lis.total++; if (ok) lis.right++; answeredAt = Date.now();
+    quizResult(lis.cur.hz, ok); renderStage(); renderStats();
+    const n = $("nextBtn"); if (n) n.focus({preventScroll:true});
+  },
+  tone: el => {
+    if (ton.ans || !ton.cur) return;
+    const k = +el.dataset.i;
+    let ok;
+    if (ui.toneSub === "syll"){ ok = k === ton.cur.k; progress.tones[ton.cur.k + 1][ok ? 0 : 1]++; markDay(); save(); }
+    else { ok = ton.cur.opts[k] === ton.cur.T; quizResult(ton.cur.it.hz, ok); }
+    ton.ans = {i:k, ok}; ton.total++; if (ok) ton.right++; answeredAt = Date.now();
+    renderStage(); renderStats();
+    const n = $("nextBtn"); if (n) n.focus({preventScroll:true});
+  },
+  filter: el => { ui.listFilter = el.dataset.v; saveUI(); renderStage(); },
+  copyweak: () => {
+    const weak = selectedItems().filter(it => status(it.hz) === "weak");
+    const text = weak.length ? weak.map(it => `${it.hz}  ${it.py}  ${it.en}`).join("\n") : "No weak words yet.";
+    const done = () => { copiedAt = Date.now(); renderStage(); setTimeout(() => { if (ui.view === "words" || ui.view === "settings") renderStage(); }, 4100); };
+    const fallback = () => { const box = $("copyBox"); if (!box) return; box.hidden = false; box.value = text; box.focus(); box.select(); };
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch(e){ fallback(); }
+  },
+  sayit: () => speak(ui.sayText),
+  sayitslow: () => speak(ui.sayText, true),
+  stop: () => { try { speechSynthesis.cancel(); } catch(e){} },
+  preset: el => { ui.sayText = PRESETS[+el.dataset.i][1]; saveUI(); renderStage(); speak(ui.sayText); }
+};
+stage.addEventListener("click", e => {
+  const el = e.target.closest("[data-act]");
+  if (!el || !stage.contains(el) || el.disabled) return;
+  const f = A[el.dataset.act]; if (f) f(el);
+});
+stage.addEventListener("input", e => {
+  if (e.target.id === "pyIn"){ (ui.mode === "listen" ? lis : pin).input = e.target.value; }
+  if (e.target.id === "sayIn"){ ui.sayText = e.target.value; saveUI(); const f = $("found"); if (f) f.innerHTML = foundHTML(); }
+});
+stage.addEventListener("change", e => {
+  const t = e.target;
+  if (t.id === "pyFront"){ ui.pinyinFront = t.checked; saveUI(); }
+  else if (t.id === "voiceSel"){ ui.voice = t.value; saveUI(); voice = zhVoices.find(x => x.name === ui.voice) || voice; speak("你好！我是加纳人。"); }
+  else if (t.id === "goalIn"){ ui.goal = Math.max(10, Math.min(300, +t.value || 40)); saveUI(); renderNav(); }
+  else if (t.id === "themeSel"){ ui.theme = t.value; saveUI(); applyTheme(); }
+  else if (t.dataset.extra){ const id = t.dataset.extra; ui.extras = t.checked ? ui.extras.concat(id) : ui.extras.filter(x => x !== id); saveUI(); resetModes(); renderNav(); renderStage(); }
+});
+stage.addEventListener("keydown", e => {
+  if (e.target.id === "pyIn" && e.key === "Enter"){ e.preventDefault(); A.check(); }
+});
+document.addEventListener("pointerdown", () => { interacted = true; }, {capture:true});
+document.addEventListener("keydown", e => {
+  interacted = true;
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const tag = e.target.tagName;
+  if (tag === "INPUT" || tag === "TEXTAREA") return;
+  const onButton = tag === "BUTTON";
+  const k = e.key;
+  if (ui.mode === "cards" && cq && cq.list[cq.i]){
+    if (!cq.shown && (k === " " || k === "Enter") && !onButton){ e.preventDefault(); A.flip(); }
+    else if (cq.shown && ["1","2","3"].includes(k)){ e.preventDefault(); A.grade({dataset:{g:String(+k - 1)}}); }
+  } else if (ui.mode === "write" && wr.cur){
+    if (!wr.revealed && (k === " " || k === "Enter") && !onButton){ e.preventDefault(); A.wreveal(); }
+    else if (wr.revealed && ["1","2","3"].includes(k)){ e.preventDefault(); A.wgrade({dataset:{g:String(+k - 1)}}); }
+  } else if ((ui.mode === "listen" && ui.listenSub === "pick") || ui.mode === "tones" || ui.mode === "grammar"){
+    const st = ui.mode === "listen" ? lis : ui.mode === "tones" ? ton : gr;
+    if (!st.ans && ["1","2","3","4"].includes(k)){
+      const act = ui.mode === "listen" ? "opt" : ui.mode === "tones" ? "tone" : "gopt";
+      const btn = stage.querySelector(`[data-act="${act}"][data-i="${+k - 1}"]`);
+      if (btn){ e.preventDefault(); btn.click(); }
+    } else if (st.ans && k === "Enter" && !onButton){ e.preventDefault(); A.next(); }
+  } else if (k === "Enter" && !onButton && (ui.mode === "pinyin" || ui.mode === "listen")){
+    const st = ui.mode === "listen" ? lis : pin;
+    if (st.ans){ e.preventDefault(); A.next(); }
+  }
+});
+
+renderAll();
+booted = true;
+initRemote();
+if (window.hsk && window.hsk.onUpdateStatus) window.hsk.onUpdateStatus(msg => { updStatus = msg; const el = $("updStatus"); if (el) el.textContent = msg; });
+})();
+</script>
+</body></html>
