@@ -1,8 +1,8 @@
 {
   "name": "road-to-hsk4",
   "productName": "Road to HSK",
-  "version": "1.1.1",
-  "description": "Chinese practice: flashcards, handwriting, pinyin, listening, tones and grammar for Integrated Chinese and HSK 1-2",
+  "version": "2.0.0",
+  "description": "Chinese study app: Integrated Chinese Lessons 1-20, HSK 1-2, stroke order, handwriting recognition, listening, reading, translation and grammar",
   "main": "main.js",
   "author": "Isaac",
   "license": "UNLICENSED",
@@ -21,11 +21,37 @@
   "build": {
     "appId": "com.isaac.roadtohsk4",
     "productName": "Road to HSK",
-    "directories": { "output": "dist", "buildResources": "build" },
-    "files": ["main.js", "preload.js", "index.html", "build/icon.png"],
-    "publish": [{ "provider": "github", "owner": "Jefest1", "repo": "road-to-hsk4", "releaseType": "release" }],
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "js/**",
+      "data/**",
+      "vendor/**",
+      "licenses/**",
+      "build/icon.png"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Jefest1",
+        "repo": "road-to-hsk4",
+        "releaseType": "release"
+      }
+    ],
     "win": {
-      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "icon": "build/icon.png",
       "artifactName": "Road to HSK Setup ${version}.${ext}"
     },
