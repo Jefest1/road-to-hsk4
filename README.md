@@ -1,6 +1,6 @@
 # Road to HSK
 
-A Chinese study app covering Integrated Chinese Lessons 1–20 and HSK 1–2: spaced-review flashcards, animated stroke order, handwriting recognition, pinyin typing with tone checking, listening, reading, translation, grammar and quiz practice, a pinyin chart, the 214 radicals, and an English/pinyin/character dictionary. Audio uses the Mandarin voices installed on the computer.
+A Chinese study app covering Integrated Chinese Lessons 1–20 and HSK 1–2: spaced-review flashcards, animated stroke order, handwriting recognition, pinyin typing with tone checking, listening, reading, translation, grammar and quiz practice, a pinyin chart, the 214 radicals, an English/pinyin/character dictionary, and whole-sentence translation between English and Chinese (with pinyin and a word-by-word breakdown). Audio uses the Mandarin voices installed on the computer.
 
 ## Layout
 
@@ -24,3 +24,11 @@ npx electron-builder --win nsis
 To publish a release that installed copies pick up automatically, bump `version` in `package.json` and `APP_VERSION` in `js/app.js`, then build with `--publish always` and a `GH_TOKEN` that can write to this repository.
 
 See `THIRD_PARTY_NOTICES.md` for data licenses.
+
+## Sentence translation
+
+Look up → Translate sends a sentence to Claude and shows the Chinese, pinyin, English, a short grammar note and each word, marking words from the textbook.
+
+- **Web version**: uses the viewer's own Claude account through the artifact's `sample` capability. Nothing to set up.
+- **Windows app**: uses the user's own Anthropic API key, entered in Settings → Translation. The key is checked with a free models call, stored encrypted with Electron `safeStorage`, and only the main process uses it; the page never receives it. Model: Claude Opus 5.5 (default, with server-side refusal fallback) or Claude Haiku 5.5, effort `low`, JSON schema output.
+- Without either, Translate still lists the closest sentences from the lessons.

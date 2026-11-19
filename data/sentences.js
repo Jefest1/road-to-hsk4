@@ -77,7 +77,14 @@ HSK.sentences = {
 ["去年/九/月/我/去/北京。","Qùnián jiǔ yuè wǒ qù Běijīng.","Last September I went to Beijing."],
 ["下个星期/三/是/十/月/一/号。","Xiàge xīngqīsān shì shí yuè yī hào.","Next Wednesday is October 1."],
 ["今天/星期二，/昨天/星期一，/明天/星期三。","Jīntiān xīngqī'èr, zuótiān xīngqīyī, míngtiān xīngqīsān.","Today is Tuesday, yesterday was Monday, and tomorrow is Wednesday."],
-["因为/我/今天/很/忙，/我们/明天/吃/中国/菜，/怎么样？","Yīnwèi wǒ jīntiān hěn máng, wǒmen míngtiān chī Zhōngguó cài, zěnmeyàng?","Because I'm very busy today, let's eat Chinese food tomorrow. How about it?"]
+["因为/我/今天/很/忙，/我们/明天/吃/中国/菜，/怎么样？","Yīnwèi wǒ jīntiān hěn máng, wǒmen míngtiān chī Zhōngguó cài, zěnmeyàng?","Because I'm very busy today, let's eat Chinese food tomorrow. How about it?"],
+["你/是/不是/学生？","Nǐ shì bu shì xuésheng?","Are you a student?"],
+["你/有/没有/她/的/照片？","Nǐ yǒu méiyǒu tā de zhàopiàn?","Do you have her photo?"],
+["我/喜欢/吃/汉堡，/还/喜欢/吃/披萨。","Wǒ xǐhuan chī hànbǎo, hái xǐhuan chī pīsà.","I like hamburgers, and pizza too."],
+["你/明天/有/没有/事儿？","Nǐ míngtiān yǒu méiyǒu shìr?","Do you have anything on tomorrow?"],
+["春节/是/中国/人/的/大/节日。","Chūnjié shì Zhōngguó rén de dà jiérì.","The Spring Festival is a big holiday for Chinese people."],
+["我们/几/点/上课？/八/点/上课。","Wǒmen jǐ diǎn shàng kè? Bā diǎn shàng kè.","What time does our class start? At eight."],
+["你/喜欢/吃/炒饭/还是/炒面？","Nǐ xǐhuan chī chǎofàn háishi chǎomiàn?","Do you like fried rice or fried noodles?"]
 ],
 4:[
 ["你/周末/喜欢/做/什么？","Nǐ zhōumò xǐhuan zuò shénme?","What do you like to do on weekends?"],
@@ -101,7 +108,13 @@ HSK.sentences = {
 ["王/先生/觉得/唱歌/很/有意思，/所以/常常/唱歌。","Wáng xiānsheng juéde chàng gē hěn yǒu yìsi, suǒyǐ chángcháng chàng gē.","Mr. Wang finds singing interesting, so he sings often."],
 ["这个/周末/我/只/想/听/音乐、/看/书。","Zhège zhōumò wǒ zhǐ xiǎng tīng yīnyuè, kàn shū.","This weekend I only want to listen to music and read."],
 ["你/找/谁？/我/找/李/老师。","Nǐ zhǎo shéi? Wǒ zhǎo Lǐ lǎoshī.","Who are you looking for? I'm looking for Teacher Li."],
-["今天/是/星期五，/我们/一起/去/打球，/怎么样？","Jīntiān shì xīngqīwǔ, wǒmen yìqǐ qù dǎ qiú, zěnmeyàng?","Today is Friday. Let's go play ball together. How about it?"]
+["今天/是/星期五，/我们/一起/去/打球，/怎么样？","Jīntiān shì xīngqīwǔ, wǒmen yìqǐ qù dǎ qiú, zěnmeyàng?","Today is Friday. Let's go play ball together. How about it?"],
+["我/觉得/中国/饭/很/好吃！","Wǒ juéde Zhōngguó fàn hěn hǎochī!","I think Chinese food is delicious!"],
+["我/喜欢/唱歌，/可是/现在/不/想/唱歌。","Wǒ xǐhuan chàng gē, kěshì xiànzài bù xiǎng chàng gē.","I like singing, but I don't feel like singing now."],
+["他/喜欢/唱/英文/歌。","Tā xǐhuan chàng Yīngwén gē.","He likes singing English songs."],
+["你/喜欢/西瓜汁/还是/苹果汁？","Nǐ xǐhuan xīguāzhī háishi píngguǒzhī?","Do you like watermelon juice or apple juice?"],
+["这个/电影/很/好看，/那个/电影/没有/意思。","Zhège diànyǐng hěn hǎokàn, nàge diànyǐng méiyǒu yìsi.","This movie is good, but that one is boring."],
+["我/觉得/打球/很/好玩，/你/觉得/呢？","Wǒ juéde dǎ qiú hěn hǎowán, nǐ juéde ne?","I think playing ball is fun. What do you think?"]
 ],
 5:[
 ["快/进来，/请/坐！","Kuài jìn lai, qǐng zuò!","Come in quickly, please sit down!"],

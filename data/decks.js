@@ -1,4 +1,4 @@
-// Vocabulary. group "class" = covered in class (L1-L3 checked against the teacher's slides, except L3 D2).
+// Vocabulary. group "class" = covered in class (L1-L4 checked against the teacher's slides; L4 D1 slides not seen yet).
 // group "book" = written from Integrated Chinese, not yet checked against slides.
 // When new slides arrive, fix the words to match them and change the group to "class".
 window.HSK = window.HSK || {};
@@ -49,18 +49,32 @@ HSK.decks = [
  {id:"l3d2", lesson:3, group:"class", name:"L3 · D2", note:"Time & invitations", items:[
   ["现在","xiànzài","now","t"],["刻","kè","quarter (of an hour)","m"],["事","shì","matter; thing; business","n"],["晚饭","wǎnfàn","dinner; supper","n"],
   ["为什么","wèishénme","why","qpr"],["因为","yīnwèi","because","conj"],["还","hái","also; too; still","adv"],["同学","tóngxué","classmate","n"],
-  ["认识","rènshi","to know (a person); to recognize","v"],["朋友","péngyou","friend","n"],["忙","máng","busy","adj"],["几点","jǐ diǎn","what time","phrase"],["很","hěn","very","adv"]
+  ["认识","rènshi","to know (a person); to recognize","v"],["朋友","péngyou","friend","n"],["忙","máng","busy","adj"],["几点","jǐ diǎn","what time","phrase"],["很","hěn","very","adv"],
+  ["事儿","shìr","matter; affair; event","n"],["有事儿","yǒu shìr","to be busy; to have something on","phrase"],
+  ["汉堡","hànbǎo","hamburger","n"],["披萨","pīsà","pizza","n"],["炒饭","chǎofàn","fried rice","n"],["炒面","chǎomiàn","fried noodles","n"],["茶","chá","tea","n"],["咖啡","kāfēi","coffee","n"]
  ]},
- {id:"l4d1", lesson:4, group:"book", name:"L4 · D1", note:"Hobbies", items:[
+ {id:"l3p", lesson:3, group:"class", name:"L3 · Practice", note:"Food, drinks & holidays", items:[
+  ["出生","chūshēng","to be born","v"],["多少","duōshao","how many; how much","qpr"],["米饭","mǐfàn","cooked rice","n"],["包子","bāozi","steamed stuffed bun","n"],
+  ["面条","miàntiáo","noodles","n"],["面包","miànbāo","bread","n"],["饺子","jiǎozi","dumplings","n"],["啤酒","píjiǔ","beer","n"],["可乐","kělè","cola","n"],
+  ["矿泉水","kuàngquánshuǐ","mineral water","n"],["牛奶","niúnǎi","milk","n"],["节日","jiérì","holiday; festival","n"],["元旦","Yuándàn","New Year's Day","n"],
+  ["春节","Chūnjié","Spring Festival (Chinese New Year)","n"],["元宵节","Yuánxiāojié","Lantern Festival","n"],["上课","shàng kè","to start class; to go to class","v"],
+  ["下课","xià kè","to finish class","v"],["分钟","fēnzhōng","minute","n"],["属","shǔ","to be born in the year of (zodiac)","v"],["过生日","guò shēngrì","to celebrate a birthday","phrase"],
+  ["旅行","lǚxíng","to travel","v"],["错","cuò","wrong","adj"]
+ ]},
+ {id:"l4d1", lesson:4, group:"class", name:"L4 · D1", note:"Hobbies", items:[
   ["周末","zhōumò","weekend","n"],["打球","dǎ qiú","to play ball","v"],["看","kàn","to watch; to look; to read","v"],["电视","diànshì","television","n"],
   ["唱歌","chàng gē","to sing","v"],["跳舞","tiào wǔ","to dance","v"],["听","tīng","to listen","v"],["音乐","yīnyuè","music","n"],["书","shū","book","n"],
   ["对","duì","right; correct","adj"],["有的时候","yǒude shíhou","sometimes","phrase"],["有的","yǒude","some","pr"],["时候","shíhou","(a point in) time; moment","n"],["电影","diànyǐng","movie","n"],["常常","chángcháng","often","adv"],
   ["外国","wàiguó","foreign country","n"],["请客","qǐng kè","to treat (someone to a meal)","v"],["所以","suǒyǐ","so; therefore","conj"]
  ]},
- {id:"l4d2", lesson:4, group:"book", name:"L4 · D2", note:"Weekend plans", items:[
-  ["好久","hǎojiǔ","a long time","phrase"],["不错","búcuò","not bad; pretty good","adj"],["想","xiǎng","to want to; to think","v"],["觉得","juéde","to feel; to think","v"],
-  ["有意思","yǒu yìsi","interesting","adj"],["意思","yìsi","meaning","n"],["只","zhǐ","only","adv"],["睡觉","shuì jiào","to sleep","v"],
-  ["算了","suàn le","forget it; never mind","phrase"],["找","zhǎo","to look for","v"],["别人","biérén","other people","pr"],["一起","yìqǐ","together","adv"]
+ {id:"l4d2", lesson:4, group:"class", name:"L4 · D2", note:"Weekend plans", items:[
+  ["小","xiǎo","small; little; young","adj"],["好久","hǎojiǔ","a long time","phrase"],["不错","búcuò","not bad; pretty good","adj"],["想","xiǎng","to want to; would like to; to think","mv"],["觉得","juéde","to feel; to think","v"],
+  ["有意思","yǒu yìsi","interesting","adj"],["意思","yìsi","meaning","n"],["只","zhǐ","only","adv"],["睡觉","shuì jiào","to sleep","vo"],["睡","shuì","to sleep","v"],["觉","jiào","sleep (in 睡一个好觉)","n"],["唱","chàng","to sing","v"],["歌","gē","song","n"],["这样","zhèyàng","like this; this way","pr"],
+  ["算了","suàn le","forget it; never mind","phrase"],["找","zhǎo","to look for","v"],["别人","biérén","other people; another person","n"],["别的","biéde","other","adj"],["一起","yìqǐ","together","adv"],
+  ["好吃","hǎochī","delicious; tasty","adj"],["好玩","hǎowán","fun","adj"],["好看","hǎokàn","good-looking; nice to watch","adj"],["好听","hǎotīng","nice to listen to","adj"],
+  ["炸","zhá","to deep-fry","v"],["蒸","zhēng","to steam","v"],["炒","chǎo","to stir-fry","v"],["煎","jiān","to pan-fry","v"],["烤","kǎo","to roast; to bake; to grill","v"],
+  ["饮料","yǐnliào","drink; beverage","n"],["汁","zhī","juice","n"],["西瓜汁","xīguāzhī","watermelon juice","n"],["草莓汁","cǎoméizhī","strawberry juice","n"],
+  ["苹果汁","píngguǒzhī","apple juice","n"],["芒果汁","mángguǒzhī","mango juice","n"],["菠萝汁","bōluózhī","pineapple juice","n"]
  ]},
  {id:"l5d1", lesson:5, group:"book", name:"L5 · D1", note:"Visiting friends", items:[
   ["进","jìn","to enter","v"],["快","kuài","fast; quick; hurry","adj"],["进来","jìn lai","to come in","v"],["介绍","jièshào","to introduce","v"],

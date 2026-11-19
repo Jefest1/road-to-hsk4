@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, Tray, Notification, shell, nativeTheme, nativeImage, ipcMain } = require("electron");
+const { app, BrowserWindow, Menu, Tray, Notification, shell, nativeTheme, nativeImage, ipcMain, safeStorage } = require("electron");
 const path = require("path");
 const fs = require("fs");
 
@@ -138,6 +138,118 @@ function createTray() {
   tray.on("click", showWindow);
 }
 
+// ---------- Sentence translation through Claude, with the user's own API key ----------
+// The key never goes back to the page. It is stored encrypted with Windows' own protection (safeStorage).
+const MODELS = { "claude-opus-5-5": { fallbacks: true }, "claude-haiku-5-5": { fallbacks: false } };
+const TR_SCHEMA = {
+  type: "object",
+  properties: {
+    from: { type: "string", enum: ["en", "zh"] },
+    zh: { type: "string" },
+    pinyin: { type: "string" },
+    en: { type: "string" },
+    words: { type: "array", items: { type: "object", properties: { hz: { type: "string" }, py: { type: "string" }, en: { type: "string" } }, required: ["hz", "py", "en"], additionalProperties: false } },
+    note: { type: "string" }
+  },
+  required: ["from", "zh", "pinyin", "en", "words", "note"],
+  additionalProperties: false
+};
+const trFile = () => path.join(app.getPath("userData"), "translate.json");
+let tr = { key: "", model: "claude-opus-5-5", stored: false }, trCtl = null;
+function loadTr() {
+  try {
+    const o = JSON.parse(fs.readFileSync(trFile(), "utf8"));
+    if (MODELS[o.model]) tr.model = o.model;
+    if (o.enc && safeStorage.isEncryptionAvailable()) { tr.key = safeStorage.decryptString(Buffer.from(o.enc, "base64")); tr.stored = true; }
+  } catch (e) {}
+}
+function saveTr() {
+  const o = { model: tr.model };
+  tr.stored = false;
+  if (tr.key && safeStorage.isEncryptionAvailable()) { o.enc = safeStorage.encryptString(tr.key).toString("base64"); tr.stored = true; }
+  try { fs.writeFileSync(trFile(), JSON.stringify(o)); } catch (e) {}
+}
+const trStatus = () => ({ hasKey: !!tr.key, hint: tr.key ? "…" + tr.key.slice(-4) : "", model: tr.model, remembered: tr.stored });
+let Anthropic = null;
+function client() {
+  if (!Anthropic) { const sdk = require("@anthropic-ai/sdk"); Anthropic = sdk.Anthropic || sdk.default; }
+  // Automated tests point this at a local stand-in server. Real use always talks to Anthropic.
+  const testBase = process.env.HSK_TEST_DATA && process.env.HSK_TEST_API;
+  return new Anthropic({ apiKey: tr.key, maxRetries: 2, timeout: 90 * 1000, ...(testBase ? { baseURL: testBase } : {}) });
+}
+function trError(e) {
+  const A = Anthropic || {};
+  const msg = String((e && e.message) || e).slice(0, 200);
+  if (A.APIUserAbortError && e instanceof A.APIUserAbortError) return { ok: false, code: "cancelled" };
+  if (A.AuthenticationError && e instanceof A.AuthenticationError) return { ok: false, code: "bad_key" };
+  if (A.PermissionDeniedError && e instanceof A.PermissionDeniedError) return { ok: false, code: "bad_key", message: msg };
+  if (A.RateLimitError && e instanceof A.RateLimitError) return { ok: false, code: "rate_limited" };
+  if (A.BadRequestError && e instanceof A.BadRequestError) return { ok: false, code: /credit balance/i.test(msg) ? "no_credit" : "bad_request", message: msg };
+  if (A.APIConnectionError && e instanceof A.APIConnectionError) return { ok: false, code: "offline" };
+  if (A.APIError && e instanceof A.APIError) return { ok: false, code: "api_error", message: msg };
+  return { ok: false, code: "api_error", message: msg };
+}
+async function translate(prompt) {
+  if (!tr.key) return { ok: false, code: "no_key" };
+  if (typeof prompt !== "string" || !prompt.trim() || prompt.length > 30000) return { ok: false, code: "bad_request", message: "Empty or too long." };
+  if (trCtl) trCtl.abort();
+  const ctl = (trCtl = new AbortController());
+  try {
+    const c = client();
+    const params = {
+      model: tr.model,
+      max_tokens: 16000,
+      output_config: { effort: "low", format: { type: "json_schema", schema: TR_SCHEMA } },
+      messages: [{ role: "user", content: prompt }]
+    };
+    // Opus: if a safety check declines, the API retries on another model in the same call.
+    let res;
+    if (MODELS[tr.model].fallbacks) {
+      try {
+        res = await c.beta.messages.create({ ...params, betas: ["server-side-fallback-2026-07-01"], fallbacks: "default" }, { signal: ctl.signal });
+      } catch (e) {
+        // If the account can't use the fallback option, ask again without it rather than failing.
+        if (!(Anthropic.BadRequestError && e instanceof Anthropic.BadRequestError && /fallback|beta/i.test(String(e.message)))) throw e;
+        res = await c.messages.create(params, { signal: ctl.signal });
+      }
+    } else {
+      res = await c.messages.create(params, { signal: ctl.signal });
+    }
+    if (res.stop_reason === "refusal") return { ok: false, code: "refused" };
+    if (res.stop_reason === "max_tokens") return { ok: false, code: "too_long" };
+    const text = res.content.filter((b) => b.type === "text").map((b) => b.text).join("");
+    let data;
+    try { data = JSON.parse(text); } catch (e) { return { ok: false, code: "bad_answer" }; }
+    return { ok: true, data, model: res.model };
+  } catch (e) {
+    return trError(e);
+  } finally {
+    if (trCtl === ctl) trCtl = null;
+  }
+}
+ipcMain.handle("hsk:tr-status", () => trStatus());
+ipcMain.handle("hsk:tr-set-key", async (_e, key) => {
+  key = String(key || "").trim();
+  if (!/^sk-ant-[A-Za-z0-9_\-]{20,300}$/.test(key)) return { ok: false, code: "format", status: trStatus() };
+  const before = tr.key;
+  tr.key = key;
+  try {
+    // Checking the key costs nothing: it only asks which models the key can use.
+    await client().models.retrieve(tr.model);
+  } catch (e) {
+    const r = trError(e);
+    if (r.code === "bad_key") { tr.key = before; return { ok: false, code: "bad_key", status: trStatus() }; }
+    if (r.code !== "offline") { tr.key = before; return { ...r, status: trStatus() }; }
+    // Offline: keep the key and let the first translation tell.
+  }
+  saveTr();
+  return { ok: true, status: trStatus() };
+});
+ipcMain.handle("hsk:tr-clear-key", () => { tr.key = ""; saveTr(); return trStatus(); });
+ipcMain.handle("hsk:tr-model", (_e, m) => { if (MODELS[m]) { tr.model = m; saveTr(); } return trStatus(); });
+ipcMain.handle("hsk:translate", (_e, prompt) => translate(prompt));
+ipcMain.on("hsk:tr-cancel", () => { if (trCtl) trCtl.abort(); });
+
 // ---------- Messages from the page ----------
 ipcMain.on("hsk:check-updates", checkForUpdates);
 ipcMain.on("hsk:streak", (_e, s) => {
@@ -160,6 +272,7 @@ if (!app.requestSingleInstanceLock()) {
   app.on("second-instance", showWindow);
   app.whenReady().then(() => {
     loadState();
+    loadTr();
     let hidden = process.argv.includes("--hidden");
     const flag = path.join(app.getPath("userData"), "start-hidden");
     if (fs.existsSync(flag)) { hidden = true; try { fs.unlinkSync(flag); } catch (e) {} }

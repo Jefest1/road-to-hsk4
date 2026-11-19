@@ -1,7 +1,7 @@
 {
   "name": "road-to-hsk4",
   "productName": "Road to HSK",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Chinese study app: Integrated Chinese Lessons 1-20, HSK 1-2, stroke order, handwriting recognition, listening, reading, translation and grammar",
   "main": "main.js",
   "author": "Isaac",
@@ -12,6 +12,7 @@
     "dist": "electron-builder --win nsis"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^1.10.0",
     "electron-updater": "6.8.11"
   },
   "devDependencies": {
