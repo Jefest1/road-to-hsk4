@@ -5,5 +5,7 @@
 - **Character facts** (`data/gen/chars.js`), from Make Me a Hanzi (Arphic PL and LGPL-licensed sources; see that project for details).
 - **Dictionary** (`data/gen/dict.js`), a filtered copy of CC-CEDICT, Creative Commons Attribution-ShareAlike 4.0, https://cc-cedict.org/
 - **Anthropic TypeScript SDK** (`@anthropic-ai/sdk`, Windows app only, for sentence translation), Apache License 2.0 (also offered under MIT), with its dependencies under their own licenses (Apache-2.0 and MIT), kept in each package folder.
+- **Bergamot translation engine loader** (`vendor/bergamot-translator.js`), from Firefox / mozilla/translations, Mozilla Public License 2.0, see `licenses/mpl-2.0.txt`. Windows app only.
+- **Offline translation engine and English<->Chinese models** (Firefox Translations), downloaded by the Windows app from Mozilla when the user asks, checked against Mozilla's SHA-256 hashes (`offline/manifest.json`). Mozilla Public License 2.0. Not stored in this repository.
 
 Practice sentences, questions and passages in `data/` are original to this app. Lesson word lists follow the vocabulary order of Integrated Chinese; no textbook dialogues are reproduced.

@@ -27,8 +27,9 @@ See `THIRD_PARTY_NOTICES.md` for data licenses.
 
 ## Sentence translation
 
-Look up → Translate sends a sentence to Claude and shows the Chinese, pinyin, English, a short grammar note and each word, marking words from the textbook.
+Look up → Translate turns a sentence into Chinese or English and shows the pinyin and each word, marking words from the textbook.
 
-- **Web version**: uses the viewer's own Claude account through the artifact's `sample` capability. Nothing to set up.
-- **Windows app**: uses the user's own Anthropic API key, entered in Settings → Translation. The key is checked with a free models call, stored encrypted with Electron `safeStorage`, and only the main process uses it; the page never receives it. Model: Claude Opus 5.5 (default, with server-side refusal fallback) or Claude Haiku 5.5, effort `low`, JSON schema output.
-- Without either, Translate still lists the closest sentences from the lessons.
+- **Windows app, offline (default, free)**: Mozilla's Firefox Translations engine (Bergamot, WebAssembly) and its English→Chinese and Chinese→English models. The user downloads them once (about 127 MB) from Mozilla's server; each file is checked against the SHA-256 in `offline/manifest.json` and stored in the app's data folder. Translation runs in a worker thread in the main process (`offline/`). Pinyin and the word list come from the textbook words first, then CC-CEDICT, split so textbook words win, with the textbook's tone changes for 一 and 不.
+- **Windows app, Claude (optional)**: the user's own Anthropic API key in Settings → Translation, stored encrypted with Electron `safeStorage` and used only by the main process. Claude Opus 5.5 (default, with server-side refusal fallback) or Claude Haiku 5.5, effort `low`, JSON schema output. Adds a grammar note, reads pinyin input, and can keep to known words.
+- **Web version**: Claude through the artifact's `sample` capability, on the viewer's own Claude account.
+- Lesson sentences close to the input are listed in every case.

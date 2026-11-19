@@ -12,5 +12,11 @@ contextBridge.exposeInMainWorld("hsk", {
   trClearKey: () => ipcRenderer.invoke("hsk:tr-clear-key"),
   trSetModel: (m) => ipcRenderer.invoke("hsk:tr-model", String(m || "")),
   translate: (prompt) => ipcRenderer.invoke("hsk:translate", String(prompt || "")),
-  trCancel: () => ipcRenderer.send("hsk:tr-cancel")
+  trCancel: () => ipcRenderer.send("hsk:tr-cancel"),
+  offStatus: () => ipcRenderer.invoke("hsk:off-status"),
+  offDownload: () => ipcRenderer.invoke("hsk:off-download"),
+  offCancel: () => ipcRenderer.send("hsk:off-cancel"),
+  offRemove: () => ipcRenderer.invoke("hsk:off-remove"),
+  offTranslate: (text) => ipcRenderer.invoke("hsk:off-translate", String(text || "")),
+  onOffProgress: (fn) => ipcRenderer.on("hsk:off-progress", (_e, s) => fn(s))
 });

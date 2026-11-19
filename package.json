@@ -1,8 +1,8 @@
 {
   "name": "road-to-hsk4",
   "productName": "Road to HSK",
-  "version": "2.1.0",
-  "description": "Chinese study app: Integrated Chinese Lessons 1-20, HSK 1-2, stroke order, handwriting recognition, listening, reading, translation and grammar",
+  "version": "2.2.0",
+  "description": "Chinese study app: Integrated Chinese Lessons 1-20, HSK 1-2, stroke order, handwriting recognition, listening, reading, sentence translation (offline or Claude) and grammar",
   "main": "main.js",
   "author": "Isaac",
   "license": "UNLICENSED",
@@ -33,6 +33,7 @@
       "js/**",
       "data/**",
       "vendor/**",
+      "offline/**",
       "licenses/**",
       "build/icon.png"
     ],
@@ -63,6 +64,10 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Road to HSK"
-    }
+    },
+    "asarUnpack": [
+      "offline/**",
+      "vendor/bergamot-translator.js"
+    ]
   }
 }

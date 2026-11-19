@@ -1,6 +1,6 @@
 (function(){
 "use strict";
-const APP_VERSION = "2.1.0";
+const APP_VERSION = "2.2.0";
 
 // ---------- Small helpers ----------
 const $ = id => document.getElementById(id);
@@ -77,7 +77,7 @@ const PRESETS = [
  ["Greetings","你好！请问，您贵姓？你叫什么名字？谢谢！不客气！再见！"]
 ];
 const ui = Object.assign({view:"home", studyMode:"cards", pmode:null, selected:null, pickMode:"multi", goal:40, theme:"system", reminders:true,
-  slow:false, voice:null, pinyinFront:false, cardDir:"read", listenSrc:"words", listenSub:"pick", toneSub:"syll", listFilter:"all", sentLen:"all", trDir:"zh", basicsTab:"pinyin", radTab:"browse", lkTab:"lookup", trSimple:false, sayText:PRESETS[0][1]}, readJSON(UI_KEY) || {});
+  slow:false, voice:null, pinyinFront:false, cardDir:"read", listenSrc:"words", listenSub:"pick", toneSub:"syll", listFilter:"all", sentLen:"all", trDir:"zh", basicsTab:"pinyin", radTab:"browse", lkTab:"lookup", trSimple:false, trEngine:"offline", sayText:PRESETS[0][1]}, readJSON(UI_KEY) || {});
 const classIds = HSK.decks.filter(d => d.group === "class").map(d => d.id);
 if (!Array.isArray(ui.selected)){
   // Older versions kept "up to lesson X" plus extras. Keep what was picked, and add L3 D2 now that the class has done it.
@@ -1106,7 +1106,7 @@ function foundHTML(){
 // Web: the page asks Claude on the viewer's own Claude account (the "sample" capability).
 // Windows app: the app asks Anthropic's API with the user's own key, which only the app's main process holds.
 const TR_KEY = "road-hsk4-translate-v1", WEB_URL = "https://claude.ai/artifact/VofSiLwyzinDbSVYjMptsZ";
-const tl = {text:"", src:"", busy:false, res:null, err:null, ctl:null, sample:null, sampleChecked:false, sampleDenied:false, desk:null, keyMsg:"", hist:readJSON(TR_KEY)};
+const tl = {text:"", src:"", busy:false, res:null, err:null, ctl:null, sample:null, sampleChecked:false, sampleDenied:false, desk:null, off:null, keyMsg:"", hist:readJSON(TR_KEY)};
 if (!Array.isArray(tl.hist)) tl.hist = [];
 const TR_EXAMPLES = ["I am a postgraduate student from Ghana.", "My classmate doesn't like walking because he finds it tiring.", "周末我们常常一起去看电影。", "Would you like to go to the beach with me at four?"];
 const TR_ERR = {
@@ -1120,8 +1120,31 @@ const TR_ERR = {
   bad_answer:"The answer came back garbled. Try again.", invalid_json:"The answer came back garbled. Try again.",
   not_granted:"This page isn't allowed to use Claude. Reload the page to be asked again.",
   sampling_disabled:"Claude isn't available on this account.", session_expired:"Sign in to Claude again, then try again.",
-  prompt_too_large:"That was too long for one go. Try a shorter piece."
+  prompt_too_large:"That was too long for one go. Try a shorter piece.",
+  no_models:"The offline translator isn't downloaded yet.",
+  pinyin_offline:"The offline translator reads characters or English, not pinyin. Type the characters, or switch to Claude, which reads pinyin.",
+  engine:"The offline translator had a problem. Try again, or restart the app."
 };
+const mb = n => Math.round(n / 1e6);
+function offProgressHTML(){
+  const s = tl.off; if (!s || !s.downloading) return "";
+  const d = s.downloading, pct = Math.max(1, Math.min(100, Math.round(d.done / d.total * 100)));
+  return `<div class="track" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Download progress"><div class="fill" style="width:${pct}%"></div></div><span class="tip">Downloading ${mb(d.done)} of ${mb(d.total)} MB from Mozilla…</span>`;
+}
+function offBoxHTML(){
+  const s = tl.off || {installed:false, total:127e6};
+  const act = s.downloading ? `<button class="ghost" data-act="off-cancel">Cancel</button>`
+    : s.installed ? `<button class="ghost" data-act="off-rm">Remove</button>` : `<button class="primary" data-act="off-dl">Download</button>`;
+  const d = s.installed ? `Ready. Stored on this computer (${mb(s.total)} MB). Works without internet.`
+    : s.downloading ? "Downloading. You can keep studying while it runs."
+    : `Not downloaded yet. One download of about ${mb(s.total)} MB from Mozilla, then it works without internet.`;
+  return `<div class="srow"><span><span class="k">Offline translator</span><span class="d">${d}</span></span>${act}</div>${offProgressHTML()}${s.error ? `<p class="notice risk" role="alert">${esc(s.error)}</p>` : ""}`;
+}
+function onOffProgress(s){
+  tl.off = s;
+  const box = $("offBox"); if (box) box.innerHTML = offBoxHTML();
+  if (ui.view === "lookup" && ui.lkTab === "tr" && !tl.busy) drawTr();
+}
 function knownWords(){
   // What the learner has met: every lesson done in class, plus whatever is picked now.
   const seen = new Set(), out = [];
@@ -1148,25 +1171,159 @@ function trPrompt(text, simple){
 function cleanResult(d){
   if (!d || typeof d !== "object") return null;
   const str = v => typeof v === "string" ? v.trim() : "";
-  const r = {from:d.from === "zh" ? "zh" : "en", zh:str(d.zh), pinyin:str(d.pinyin), en:str(d.en), note:str(d.note),
+  const r = {engine:"claude", from:d.from === "zh" ? "zh" : "en", zh:str(d.zh), pinyin:str(d.pinyin), en:str(d.en), note:str(d.note),
     words:Array.isArray(d.words) ? d.words.filter(w => w && typeof w.hz === "string" && isZh(w.hz)).slice(0, 80).map(w => ({hz:str(w.hz), py:str(w.py), en:str(w.en)})) : []};
   return r.zh && isZh(r.zh) ? r : null;
 }
-function trEngine(){
-  if (window.hsk && window.hsk.translate) return !tl.desk ? "wait" : tl.desk.hasKey ? "app" : "needkey";
+// ----- Offline results: the engine gives only the translation, so pinyin and the word list come from the
+// textbook words first and CC-CEDICT after, with the tone changes of 一 and 不 that the textbook marks.
+const POLY = {个:"gè",累:"lèi",行:"xíng",得:"de",地:"de",着:"zhe",了:"le",还:"hái",都:"dōu",长:"cháng",重:"zhòng",为:"wèi",少:"shǎo",好:"hǎo",要:"yào",觉:"jué",乐:"lè",教:"jiāo",种:"zhǒng",数:"shù",处:"chù",便:"biàn",相:"xiāng",中:"zhōng",正:"zhèng",难:"nán",量:"liàng",场:"chǎng",差:"chà",那:"nà",哪:"nǎ",只:"zhǐ",空:"kōng",调:"diào",传:"chuán",干:"gàn",发:"fā",和:"hé",的:"de",么:"me",们:"men",将:"jiāng",分:"fēn",间:"jiān",看:"kàn",几:"jǐ",更:"gèng",假:"jià",省:"shěng",啊:"a",吧:"ba",呢:"ne",吗:"ma",呀:"ya",没:"méi",给:"gěi",把:"bǎ",过:"guò",上:"shàng",下:"xià",大:"dà",一:"yī",不:"bù"};
+function zhLex(w){
+  if (KEEP[w]) return {py:KEEP[w], en:{"这个":"this (one)","那个":"that (one)","哪个":"which (one)","有没有":"have or not? (question)","是不是":"is it or not? (question)"}[w]};
+  const it = DICT.get(w);
+  if (it && !/…/.test(it.hz)) return {py:it.py, en:it.en, item:it};
+  if (!lk.map){ lk.map = new Map(); (lk.dict || []).forEach(e => { if (!lk.map.has(e.hz)) lk.map.set(e.hz, e); }); }
+  if (POLY[w]){
+    if (!lk.poly) lk.poly = new Map();
+    if (!lk.poly.has(w)) lk.poly.set(w, (lk.dict || []).find(x => x.hz === w && x.py === POLY[w]) || lk.map.get(w) || null);
+    const e = lk.poly.get(w);
+    return {py:POLY[w], en:e ? e.en : ""};
+  }
+  const e = lk.map.get(w);
+  return e ? {py:e.py, en:e.en} : null;
+}
+// Words the textbook writes as one, though they aren't in the word lists as such.
+const KEEP = {"这个":"zhège","那个":"nàge","哪个":"nǎge","有没有":"yǒu méiyǒu","是不是":"shì bu shì"};
+const isLesson = w => !!KEEP[w] || (DICT.has(w) && !/…/.test(w));
+function lessonSplit(w){
+  // Can this dictionary entry be written as 2-3 textbook words instead? (不是 -> 不 是, 喝茶 -> 喝 茶)
+  const c = Array.from(w), n = c.length;
+  for (let a = 1; a < n; a++){
+    const x = c.slice(0, a).join(""), y = c.slice(a).join("");
+    if (isLesson(x) && isLesson(y)) return true;
+    for (let b = a + 1; b < n; b++) if (isLesson(x) && isLesson(c.slice(a, b).join("")) && isLesson(c.slice(b).join(""))) return true;
+  }
+  return false;
+}
+function segZh(run){
+  // Cheapest split: textbook words cost least, so learners see the words they study, spaced the way the book spaces them.
+  const ch = Array.from(run), n = ch.length, best = new Array(n + 1).fill(null);
+  best[0] = {cost:0, words:[]};
+  for (let i = 0; i < n; i++){
+    if (!best[i]) continue;
+    for (let L = 1; L <= Math.min(6, n - i); L++){
+      const w = ch.slice(i, i + L).join("");
+      let cost;
+      if (isLesson(w)) cost = 1;
+      else if (!zhLex(w)) { if (L > 1) continue; cost = 1.5; }
+      else cost = L === 1 ? 1.2 : (lessonSplit(w) ? 3.5 : 1.1);
+      const c = best[i].cost + cost;
+      if (!best[i + L] || c < best[i + L].cost - 1e-9 || (Math.abs(c - best[i + L].cost) < 1e-9 && best[i].words.length + 1 < best[i + L].words.length))
+        best[i + L] = {cost:c, words:best[i].words.concat(w)};
+    }
+  }
+  return best[n].words;
+}
+const DIG = ["líng","yī","èr","sān","sì","wǔ","liù","qī","bā","jiǔ"];
+function numPy(s, next){
+  const n = +s;
+  if (!/^\d+$/.test(s) || (next === "年" && s.length >= 3) || n >= 1000) return Array.from(s).map(d => DIG[+d] || d).join(" ");
+  const two = k => k < 10 ? DIG[k] : (k < 20 ? "shí" : DIG[Math.floor(k/10)] + "shí") + (k % 10 ? DIG[k % 10] : "");
+  if (n < 100) return two(n);
+  const h = Math.floor(n/100), r = n % 100;
+  return (h === 1 ? "yì" : h === 2 ? "liǎng" : DIG[h]) + "bǎi" + (r ? (r < 10 ? "líng" + DIG[r] : (r < 20 ? "yī" : "") + two(r)) : "");
+}
+function zhPunct(s){
+  // The offline engine writes English punctuation after Chinese; use the Chinese marks the textbook uses.
+  return s.replace(/,\s*/g, "，").replace(/\?\s*/g, "？").replace(/!\s*/g, "！").replace(/(\D):\s*/g, "$1：").replace(/;\s*/g, "；")
+    .replace(/(^|[^\d])\.(\s+|$)/g, "$1。").replace(/"([^"]*)"/g, "“$1”").replace(/\s+(?=[㐀-鿿，。？！：；“”])|([㐀-鿿，。？！：；“”])\s+(?=[㐀-鿿])/g, "$1");
+}
+function analyzeZh(text){
+  // Tokens: Chinese words, numbers, Latin words, punctuation.
+  const toks = [];
+  for (const m of text.matchAll(/([㐀-鿿]+)|(\d+)|([A-Za-zÀ-ÿ'’\-]+)|(\s+)|(.)/g)){
+    if (m[1]) segZh(m[1]).forEach(w => toks.push({t:"zh", w}));
+    else if (m[2]) toks.push({t:"num", w:m[2]});
+    else if (m[3]) toks.push({t:"lat", w:m[3]});
+    else if (m[5]) toks.push({t:"p", w:m[5]});
+  }
+  // Syllables per Chinese word, flattened so the tone changes can look at the next syllable.
+  const flat = [];
+  toks.forEach((k, ti) => {
+    if (k.t !== "zh") { if (k.t === "p" || k.t === "num" || k.t === "lat") flat.push({ti, brk:k.t === "p", ch:k.w}); return; }
+    const lx = zhLex(k.w), chars = Array.from(k.w);
+    k.lex = lx; k.cap = !!(lx && /^[A-ZĀÁǍÀĒÉĚÈŌÓǑÒ]/.test(lx.py));
+    k.syl = lx ? pySylls(lx.py) : chars.map(() => ({base:"?", tone:0}));
+    // Keep the textbook's spaces inside a phrase (dǎ qiú, yǒu méiyǒu).
+    k.gaps = new Set(); if (lx){ let at = 0; lx.py.trim().split(/\s+/).forEach(c => { at += pySylls(c).length; k.gaps.add(at); }); }
+    const aligned = k.syl.length === chars.length;
+    k.syl.forEach((s, j) => flat.push({ti, s, ch: aligned ? chars[j] : ""}));
+  });
+  const NUMC = /[0-9零一二三四五六七八九十百千万两第]/;
+  flat.forEach((f, i) => {
+    if (!f.s) return;
+    const nx = flat[i+1] && flat[i+1].s ? flat[i+1] : null, pv = flat[i-1];
+    if (f.ch === "不" && f.s.base === "bu") f.s.tone = nx && nx.s.tone === 4 ? 2 : 4;
+    else if (f.ch === "一" && f.s.base === "yi"){
+      const nextCh = flat[i+1] ? flat[i+1].ch : "";
+      if (!nx || (pv && NUMC.test(pv.ch || "")) || /^[0-9零一二三四五六七八九十百千万月号日]/.test(nextCh || "")) f.s.tone = 1;
+      else f.s.tone = nx.s.tone === 4 || nx.ch === "个" ? 2 : 4;
+    }
+  });
+  flat.forEach((f, i) => { if (f.s && f.ch === "个" && i > 0 && /[0-9零一二三四五六七八九十两这那几哪每]/.test(flat[i-1].ch || "")) f.s.tone = 0; });
+  const wordPy = k => {
+    const p = k.syl.map((s, j) => (j > 0 ? (k.gaps.has(j) ? " " : /^[aoe]/.test(s.base) ? "'" : "") : "") + markSyl(s.base, s.tone)).join("");
+    return k.cap ? p.charAt(0).toUpperCase() + p.slice(1) : p;
+  };
+  const PUN = {"，":",","、":",","。":".","？":"?","！":"!","：":":","；":";","“":"\"","”":"\"","（":"(","）":")","《":"\"","》":"\"","…":"…"};
+  let py = "";
+  toks.forEach((k, i) => {
+    let s;
+    if (k.t === "zh") s = wordPy(k);
+    else if (k.t === "num") s = numPy(k.w, toks[i+1] && toks[i+1].w ? Array.from(toks[i+1].w)[0] : "");
+    else if (k.t === "lat") s = k.w;
+    else { py = py.replace(/\s+$/, "") + (PUN[k.w] || k.w) + (/[“（《]/.test(k.w) ? "" : " "); return; }
+    py += (py && !/\s$/.test(py) && !/["(]$/.test(py) ? " " : "") + s + " ";
+  });
+  py = py.replace(/\s+/g, " ").trim().replace(/(^|[.?!]\s+)([a-zāáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ])/g, (m, a, b) => a + b.toUpperCase());
+  const seen = new Set(), words = [];
+  toks.forEach(k => {
+    if (k.t !== "zh" || seen.has(k.w)) return;
+    seen.add(k.w);
+    const en = k.lex ? String(k.lex.en).split(/;\s*/).slice(0, 2).join("; ").replace(/\s*\(CL:[^)]*\)/g, "").slice(0, 70) : "";
+    words.push({hz:k.w, py:wordPy(k), en});
+  });
+  return {pinyin:py, words};
+}
+function offlineResult(src, r){
+  const zh = r.from === "zh" ? src : zhPunct(r.text);
+  const a = analyzeZh(zh);
+  return {from:r.from, zh, pinyin:a.pinyin, en:r.from === "zh" ? r.text : src, words:a.words, note:"", engine:"offline"};
+}
+
+function trEngine(force){
+  if (window.hsk && window.hsk.translate){
+    if ((force || ui.trEngine) === "claude") return !tl.desk ? "wait" : tl.desk.hasKey ? "app" : "needkey";
+    return !tl.off ? "wait" : tl.off.installed ? "offline" : "needmodels";
+  }
   if (tl.sample && !tl.sampleDenied) return "web";
   return tl.sampleChecked ? "none" : "wait";
 }
-async function runTranslate(){
+async function runTranslate(force){
   const text = tl.text.trim().slice(0, 600);
   if (!text || tl.busy) return;
-  const eng = trEngine();
+  const eng = trEngine(force);
   tl.err = null; tl.res = null; tl.src = text;
-  if (eng !== "app" && eng !== "web"){ tl.err = {code: eng === "needkey" ? "no_key" : "none"}; drawTr(); return; }
+  if (eng === "offline" && !isZh(text) && /[āáǎàēéěèīíǐìōóǒòūúǔùǖǘǚǜ]/.test(text)){ tl.err = {code:"pinyin_offline"}; drawTr(); return; }
+  if (eng !== "app" && eng !== "web" && eng !== "offline"){ tl.err = {code: eng === "needkey" ? "no_key" : eng === "needmodels" ? "no_models" : "none"}; drawTr(); return; }
   tl.busy = true; drawTr();
   let out = null;
   try {
-    if (eng === "app"){
+    if (eng === "offline"){
+      const [r] = await Promise.all([window.hsk.offTranslate(text), dictReady()]);
+      if (r && r.ok){ out = offlineResult(text, r); }
+      else tl.err = r && r.code === "not_installed" ? {code:"no_models"} : {code:"engine", message:r && r.message};
+    } else if (eng === "app"){
       const r = await window.hsk.translate(trPrompt(text, ui.trSimple));
       if (r && r.ok){ out = cleanResult(r.data); if (!out) tl.err = {code:"bad_answer"}; }
       else if (r && r.code !== "cancelled") tl.err = r;
@@ -1213,10 +1370,13 @@ function drawTr(){
   if (go) go.disabled = tl.busy;
   if (stop) stop.hidden = !tl.busy;
   let h = "";
+  if (eng === "needmodels" && !tl.res) h += tl.off && tl.off.downloading
+    ? `<div class="callout"><span style="flex:1 1 100%">Getting the offline translator ready…</span>${offProgressHTML()}<button class="ghost sm" data-act="off-cancel">Cancel</button></div>`
+    : `<div class="callout"><span>The free offline translator needs a one-time download of about ${mb((tl.off && tl.off.total) || 127e6)} MB from Mozilla. After that it works without internet.${tl.off && tl.off.error ? " " + esc(tl.off.error) : ""}</span><span class="row"><button class="primary sm" data-act="off-dl">Download now</button>${tl.desk && tl.desk.hasKey ? `<button class="ghost sm" data-act="treng" data-v="claude">Use Claude</button>` : ""}</span></div>`;
   if (eng === "needkey" && !tl.res) h += `<div class="callout"><span>Translating sentences uses Claude. Add your Anthropic API key in Settings (you pay Anthropic per sentence), or use the web version free with your Claude account.</span><span class="row"><button class="ghost sm" data-act="tr-settings">Add a key</button><button class="ghost sm" data-act="tr-web">Open web version</button></span></div>`;
   if (eng === "none" && !tl.res) h += `<div class="callout"><span>${tl.sampleDenied ? "This page isn't allowed to use Claude, so it can't translate sentences. Reload the page to be asked again." : window.claude ? "Sign in to Claude to translate sentences here." : "Sentence translation isn't available here. It works in the Claude app and at claude.ai."} Matching sentences from your lessons still show below.</span></div>`;
   if (tl.busy) h += `<div class="panel"><p class="hint" role="status">Translating “${esc(tl.src.slice(0, 80))}${tl.src.length > 80 ? "…" : ""}”… This takes a few seconds.</p></div>`;
-  if (tl.err && tl.err.code !== "none") h += `<div class="notice risk" role="alert">${esc(TR_ERR[tl.err.code] || ("Something went wrong. Try again." + (tl.err.message ? " (" + tl.err.message + ")" : "")))}${tl.err.code === "no_key" || tl.err.code === "bad_key" ? ` <button class="ghost sm" data-act="tr-settings">Open Settings</button>` : ""}</div>`;
+  if (tl.err && tl.err.code !== "none" && tl.err.code !== "no_models") h += `<div class="notice risk" role="alert">${esc(TR_ERR[tl.err.code] || ("Something went wrong. Try again." + (tl.err.message ? " (" + tl.err.message + ")" : "")))}${tl.err.code === "no_key" || tl.err.code === "bad_key" ? ` <button class="ghost sm" data-act="tr-settings">Open Settings</button>` : ""}</div>`;
   const r = tl.res;
   if (r){
     h += `<section class="panel trres">
@@ -1227,7 +1387,9 @@ function drawTr(){
       <div class="btnrow l"><button class="primary sm" data-act="say" data-text="${esc(r.zh)}">${SPEAKER} Play</button><button class="ghost sm" data-act="sayslow" data-text="${esc(r.zh)}">Play slowly</button><button class="ghost sm" data-act="tr-read">Open in Read aloud</button></div>
       ${r.note ? `<p class="trnote"><b>Note:</b> ${esc(r.note)}</p>` : ""}
       ${r.words.length ? `<p class="label">Word by word</p><div class="tablewrap"><table><tbody>${r.words.map(trWordRow).join("")}</tbody></table></div>` : ""}
-      <p class="hint" style="font-size:.8rem">Translated by Claude. Words with a lesson name come from your textbook. Check anything important with your teacher.</p>
+      ${r.engine === "offline"
+        ? `<p class="hint" style="font-size:.8rem">Translated offline by Mozilla's Firefox translator. Pinyin and meanings come from the app's dictionary, and words with a lesson name come from your textbook. Machine translation can be wrong, so check important sentences with your teacher.</p>${window.hsk && tl.desk && tl.desk.hasKey ? `<div class="btnrow l"><button class="ghost sm" data-act="tr-claude">Ask Claude for a grammar note</button></div>` : ""}`
+        : `<p class="hint" style="font-size:.8rem">Translated by Claude. Words with a lesson name come from your textbook. Check anything important with your teacher.</p>`}
     </section>`;
   }
   if (tl.src && !tl.busy){
@@ -1243,7 +1405,8 @@ function renderTr(tabs){
   stage.innerHTML = `<div class="set"><div class="bar-row">${tabs}</div><div class="panel">
     <textarea id="trIn" class="say" maxlength="600" placeholder="Type a sentence in English or Chinese. 例如：我是加纳人。" aria-label="Sentence to translate">${esc(tl.text)}</textarea>
     <div class="btnrow l"><button class="primary" id="trGo" data-act="tr-go">Translate</button><button class="ghost" id="trStop" data-act="tr-stop" hidden>Stop</button>
-      <label class="chk"><input type="checkbox" id="trSimple" ${ui.trSimple ? "checked" : ""}> Use words I know</label><span class="tip" style="flex:1;text-align:right">Enter to translate · Shift+Enter for a new line</span></div>
+      ${window.hsk && window.hsk.offTranslate ? seg("treng", [["offline","Offline (free)"],["claude","Claude"]], ui.trEngine) : ""}
+      ${!window.hsk || ui.trEngine === "claude" ? `<label class="chk"><input type="checkbox" id="trSimple" ${ui.trSimple ? "checked" : ""}> Use words I know</label>` : ""}<span class="tip" style="flex:1;text-align:right">Enter to translate · Shift+Enter for a new line</span></div>
     <div class="btnrow l">${TR_EXAMPLES.map((x, k) => `<button class="ghost sm" data-act="tr-ex" data-i="${k}" lang="${isZh(x) ? "zh-CN" : "en"}">${esc(x)}</button>`).join("")}</div>
   </div><div id="trOut"></div></div>`;
   drawTr();
@@ -1253,6 +1416,10 @@ const looksLikeSentence = q => isZh(q) ? (Array.from(q.replace(/\s/g,"")).length
 function initTranslate(){
   if (window.hsk && window.hsk.trStatus){
     window.hsk.trStatus().then(s => { tl.desk = s; if (ui.view === "lookup" && ui.lkTab === "tr") drawTr(); }).catch(() => { tl.desk = {hasKey:false}; });
+    if (window.hsk.offStatus){
+      window.hsk.onOffProgress(onOffProgress);
+      window.hsk.offStatus().then(onOffProgress).catch(() => { tl.off = {installed:false, total:127e6}; });
+    }
     return;
   }
   if (!window.claude || typeof window.claude.use !== "function"){ tl.sampleChecked = true; return; }
@@ -1280,7 +1447,10 @@ function renderLookup(){
 function trSettingsHTML(){
   const s = tl.desk || {hasKey:false, model:"claude-opus-5-5"};
   return `<section class="panel section"><h3>Translation</h3>
-      <p class="note">Translate (in Look up) sends your sentence to Claude using your own Anthropic API key. Anthropic charges your account a little for each sentence. The free alternative is the web version, which uses your Claude account.</p>
+      <p class="note">Translate (in Look up) turns whole sentences into Chinese or English. The offline translator is free and private. Claude is more accurate, adds a grammar note, reads pinyin, and can keep to words you know, but needs an Anthropic API key that Anthropic charges a little per sentence.</p>
+      <div class="srow"><span><span class="k">Use</span><span class="d">Which translator Translate uses</span></span>${seg("treng", [["offline","Offline (free)"],["claude","Claude"]], ui.trEngine)}</div>
+      <div id="offBox">${offBoxHTML()}</div>
+      <h4 class="sub">Claude</h4>
       <div class="srow"><span><span class="k">API key</span><span class="d">${s.hasKey ? `Saved, ending ${esc(s.hint || "")}. ${s.remembered ? "Stored encrypted on this computer." : "Kept until you quit the app."}` : "No key yet. Create one at console.anthropic.com under API keys, then paste it here."}</span></span>${s.hasKey ? `<button class="ghost" data-act="tr-clearkey">Remove key</button>` : ""}</div>
       <div class="pyin"><input id="keyIn" type="password" autocomplete="off" spellcheck="false" placeholder="${s.hasKey ? "Paste a new key to replace it" : "sk-ant-…"}" aria-label="Anthropic API key"><button class="ghost" data-act="tr-savekey">Save key</button></div>
       ${tl.keyMsg ? `<p class="tip" role="status">${esc(tl.keyMsg)}</p>` : ""}
@@ -1475,6 +1645,11 @@ const A = {
   // Look up
   lktab: el => { ui.lkTab = el.dataset.v; saveUI(); renderStage(); },
   "lk-tr": () => { tl.text = lk.q; ui.lkTab = "tr"; saveUI(); renderStage(); runTranslate(); },
+  treng: el => { ui.trEngine = el.dataset.v === "claude" ? "claude" : "offline"; saveUI(); renderStage(); },
+  "off-dl": () => { if (!window.hsk || !window.hsk.offDownload) return; tl.off = Object.assign({}, tl.off, {error:"", downloading:{done:0, total:(tl.off && tl.off.total) || 127e6}}); onOffProgress(tl.off); window.hsk.offDownload().then(onOffProgress, () => {}); },
+  "off-cancel": () => { if (window.hsk && window.hsk.offCancel) window.hsk.offCancel(); },
+  "off-rm": async () => { if (!window.hsk || !window.hsk.offRemove) return; onOffProgress(await window.hsk.offRemove()); },
+  "tr-claude": () => { if (!tl.src) return; tl.text = tl.src; runTranslate("claude"); },
   "tr-go": () => { const i = $("trIn"); if (i) tl.text = i.value; runTranslate(); },
   "tr-stop": () => { if (tl.ctl) tl.ctl.abort(); if (window.hsk && window.hsk.trCancel) window.hsk.trCancel(); },
   "tr-ex": el => { tl.text = TR_EXAMPLES[+el.dataset.i]; const i = $("trIn"); if (i) i.value = tl.text; runTranslate(); },

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, Tray, Notification, shell, nativeTheme, nativeImage, ipcMain, safeStorage } = require("electron");
+const { app, BrowserWindow, Menu, Tray, Notification, shell, nativeTheme, nativeImage, ipcMain, safeStorage, net } = require("electron");
 const path = require("path");
 const fs = require("fs");
 
@@ -175,7 +175,8 @@ function client() {
   if (!Anthropic) { const sdk = require("@anthropic-ai/sdk"); Anthropic = sdk.Anthropic || sdk.default; }
   // Automated tests point this at a local stand-in server. Real use always talks to Anthropic.
   const testBase = process.env.HSK_TEST_DATA && process.env.HSK_TEST_API;
-  return new Anthropic({ apiKey: tr.key, maxRetries: 2, timeout: 90 * 1000, ...(testBase ? { baseURL: testBase } : {}) });
+  // Electron's own network stack, so requests follow Windows proxy and VPN settings like the browser does.
+  return new Anthropic({ apiKey: tr.key, maxRetries: 2, timeout: 90 * 1000, fetch: (url, init) => net.fetch(url, init), ...(testBase ? { baseURL: testBase } : {}) });
 }
 function trError(e) {
   const A = Anthropic || {};
@@ -250,6 +251,32 @@ ipcMain.handle("hsk:tr-model", (_e, m) => { if (MODELS[m]) { tr.model = m; saveT
 ipcMain.handle("hsk:translate", (_e, prompt) => translate(prompt));
 ipcMain.on("hsk:tr-cancel", () => { if (trCtl) trCtl.abort(); });
 
+// ---------- Free offline translation (Mozilla's Firefox Translations engine and models) ----------
+let offline = null;
+function off() {
+  if (offline) return offline;
+  const { createOffline } = require("./offline/manager.js");
+  // Automated tests serve the files from a local folder instead of Mozilla's server.
+  const testBase = process.env.HSK_TEST_DATA && process.env.HSK_TEST_OFFLINE;
+  offline = createOffline({
+    dataDir: app.getPath("userData"),
+    fetchFn: async (url, init) => {
+      const u = testBase ? testBase + "/" + path.basename(url) : url;
+      // Mozilla's file server answers Chromium's network stack with "406 Not Acceptable", so download with Node's.
+      // If Node can't connect at all (for example behind a Windows proxy), try Electron's, which follows proxy settings.
+      try { return await fetch(u, init); }
+      catch (e) { if (init && init.signal && init.signal.aborted) throw e; return net.fetch(u, init); }
+    },
+    onProgress: (s) => { if (win && !win.isDestroyed()) win.webContents.send("hsk:off-progress", s); }
+  });
+  return offline;
+}
+ipcMain.handle("hsk:off-status", () => off().status());
+ipcMain.handle("hsk:off-download", () => off().download());
+ipcMain.on("hsk:off-cancel", () => off().cancel());
+ipcMain.handle("hsk:off-remove", () => off().remove());
+ipcMain.handle("hsk:off-translate", (_e, text) => off().translate(String(text || "")));
+
 // ---------- Messages from the page ----------
 ipcMain.on("hsk:check-updates", checkForUpdates);
 ipcMain.on("hsk:streak", (_e, s) => {
@@ -285,6 +312,6 @@ if (!app.requestSingleInstanceLock()) {
     setInterval(checkForUpdates, 6 * 3600 * 1000);
     app.on("activate", showWindow);
   });
-  app.on("before-quit", () => { quitting = true; });
+  app.on("before-quit", () => { quitting = true; if (offline) { offline.cancel(); offline.stop(); } });
   app.on("window-all-closed", () => { if (!state.reminders || quitting) app.quit(); });
 }
