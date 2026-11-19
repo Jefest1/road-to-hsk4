@@ -33,3 +33,7 @@ Look up → Translate turns a sentence into Chinese or English and shows the pin
 - **Windows app, Claude (optional)**: the user's own Anthropic API key in Settings → Translation, stored encrypted with Electron `safeStorage` and used only by the main process. Claude Opus 5.5 (default, with server-side refusal fallback) or Claude Haiku 5.5, effort `low`, JSON schema output. Adds a grammar note, reads pinyin input, and can keep to known words.
 - **Web version**: Claude through the artifact's `sample` capability, on the viewer's own Claude account.
 - Lesson sentences close to the input are listed in every case.
+
+## Releasing
+
+Set `version` in package.json, commit and push, then push a matching tag (`git tag v2.3.0 && git push origin v2.3.0`). The Release workflow (`.github/workflows/release.yml`) builds the Windows installer on GitHub and publishes it; installed apps update from the newest release.
